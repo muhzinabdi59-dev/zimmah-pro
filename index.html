@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ذمة - Zimmah Pro | النظام المالي الذكي</title>
+    <!-- الهوية البرمجية والجاهزية للتطوير المستمر (AI-Ready Extensibility) -->
+    <meta name="author" content="Mohsen Abdulkhabir - Zimmah Pro Architecture">
+    <meta name="ai-extensibility" content="Modular, Plugin-Ready, Multi-Language, Secure PIN Engine">
+    <style>
+        :root {
+            --primary: #064e3b;
+            --secondary: #047857;
+            --accent: #10b981;
+            --gold: #d97706;
+            --bg: #f3f4f6;
+            --card: #ffffff;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --danger: #ef4444;
+            --success: #22c55e;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg); color: var(--text); display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        
+        header { background-color: var(--primary); color: white; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .logo-area { display: flex; align-items: center; gap: 10px; }
+        .logo-icon { background-color: var(--accent); color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .logo-text h1 { font-size: 1rem; margin: 0; }
+        .logo-text span { font-size: 0.7rem; color: #d1d5db; }
+        .header-actions { display: flex; gap: 6px; }
+        .header-btn { background: rgba(255,255,255,0.15); border: none; color: white; width: 32px; height: 32px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; }
+
+        main { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 85px; }
+        .view { display: none; }
+        .view.active { display: block; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+        .card { background: var(--card); padding: 12px; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border-right: 4px solid var(--accent); }
+        .card.gold { border-right-color: var(--gold); background: #fffbeb; }
+        .card h3 { font-size: 0.75rem; color: var(--muted); margin-bottom: 4px; }
+        .card .val { font-size: 1.1rem; font-weight: bold; color: var(--primary); }
+
+        nav { background: var(--card); border-top: 1px solid #e5e7eb; display: flex; justify-content: space-around; padding: 8px 0; position: absolute; bottom: 0; left: 0; right: 0; z-index: 100; box-shadow: 0 -2px 5px rgba(0,0,0,0.05); }
+        .nav-btn { background: none; border: none; display: flex; flex-direction: column; align-items: center; color: var(--muted); font-size: 0.7rem; cursor: pointer; flex: 1; }
+        .nav-btn.active { color: var(--secondary); font-weight: bold; }
+        .nav-btn span { font-size: 1.1rem; margin-bottom: 2px; }
+
+        .btn { background-color: var(--secondary); color: white; border: none; padding: 10px; border-radius: 8px; font-size: 0.85rem; cursor: pointer; width: 100%; font-weight: bold; margin-top: 8px; text-align: center; }
+        .btn-gold { background-color: var(--gold); }
+        .btn-evc { background-color: #0284c7; color: white; border: none; padding: 9px; border-radius: 8px; font-size: 0.85rem; cursor: pointer; font-weight: bold; width: 100%; margin-top: 5px; }
+        
+        input, select { width: 100%; padding: 10px; margin-top: 4px; margin-bottom: 10px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 0.85rem; background: white; }
+        label { font-size: 0.8rem; color: var(--muted); font-weight: 600; }
+        .item { background: var(--card); padding: 12px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
+        .masked { filter: blur(5px); user-select: none; }
+        .badge { background: #e6f4ea; color: var(--secondary); padding: 3px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: bold; }
+        .badge-risk { background: #fee2e2; color: var(--danger); }
+        
+        .dev-signature-box { background: #1e293b; color: #38bdf8; padding: 10px; border-radius: 8px; font-size: 0.75rem; margin-top: 15px; border-left: 4px solid var(--accent); line-height: 1.4; }
+
+        #lock-screen { position: fixed; inset: 0; background: var(--primary); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; padding: 20px; }
+        #lock-screen input { width: 200px; text-align: center; font-size: 1.2rem; letter-spacing: 5px; color: #000; }
+    </style>
+</head>
+<body>
+
+    <!-- شاشة القفل الأمني -->
+    <div id="lock-screen">
+        <div class="logo-icon" style="width:60px; height:60px; font-size:1.5rem; margin-bottom:15px;">ذ</div>
+        <h2 id="lock-title">أدخل رمز الحماية (PIN)</h2>
+        <span style="font-size: 0.75rem; color:#d1d5db; margin-bottom:15px;">حماية سرية البيانات المالية عن العمال والغرباء</span>
+        <input type="password" id="pin-input" maxlength="4" placeholder="••••">
+        <button class="btn" style="width: 200px; background:var(--accent);" onclick="checkPin()">فتح التطبيق</button>
+    </div>
+
+    <header>
+        <div class="logo-area">
+            <div class="logo-icon">ذ</div>
+            <div class="logo-text">
+                <h1 id="app-title">ذِمّــــة (Zimmah Pro)</h1>
+                <span id="app-subtitle">النظام المالي وحماية الديون</span>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="header-btn" onclick="togglePrivacy()" title="وضع الخصوصية (إخفاء الأرقام)">👁️️</button>
+            <button class="header-btn" onclick="toggleDemo()" title="وضع التجربة الفورية">⚡</button>
+            <button class="header-btn" onclick="exportBackup()" title="النسخ الاحتياطي اليدوي">💾</button>
+            <button class="header-btn" onclick="switchView('settings')" title="الإعدادات والأمان">⚙️</button>
+        </div>
+    </header>
+
+    <main id="main-container">
+        <!-- الرئيسية -->
+        <section id="view-home" class="view active">
+            <div class="grid-2">
+                <div class="card">
+                    <h3 id="lbl-total-debt">إجمالي الديون المعلقة</h3>
+                    <div class="val" id="total-debt">0.00</div>
+                </div>
+                <div class="card gold">
+                    <h3 id="lbl-daily-profit">صافي الأرباح اليومية</h3>
+                    <div class="val" id="daily-profit">0.00</div>
+                </div>
+            </div>
+            <div style="background: white; padding: 12px; border-radius: 10px; margin-top: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                <button class="btn" onclick="switchView('customers')" id="btn-add-cust">+ إضافة زبون / تسجيل دين جديد</button>
+                <button class="btn-evc" onclick="triggerEVC()" id="btn-evc-quick">⚡ تحصيل سريع عبر EVC Plus</button>
+                <button class="btn" style="background:#475569; margin-top:6px;" onclick="addExpense()" id="btn-add-expense">📉 تسجيل مصروفات نثريات يومية</button>
+            </div>
+        </section>
+
+        <!-- الزبائن والرهن الرقمي -->
+        <section id="view-customers" class="view">
+            <h2 id="lbl-cust-title" style="font-size: 1rem; margin-bottom: 8px; color: var(--primary);">إدارة الزبائن والوثائق والرهن</h2>
+            <button class="btn" onclick="addCustomer()" id="btn-new-cust">+ إضافة زبون مع ضمان رقمي</button>
+            <div id="customers-list" style="margin-top: 10px;"></div>
+        </section>
+
+        <!-- الباقة الاحترافية -->
+        <section id="view-profit" class="view">
+            <h2 id="lbl-pro-title" style="font-size: 1rem; margin-bottom: 8px; color: var(--primary);">الباقة الاحترافية (7$ / شهرياً)</h2>
+            <div class="card gold" style="margin-bottom: 10px;">
+                <h3 id="lbl-drawer">إجمالي مبيعات الصندوق اليوم</h3>
+                <div class="val" id="cash-drawer">0.00</div>
+            </div>
+            <button class="btn btn-gold" onclick="addProfitEntry()" id="btn-add-profit">+ تسجيل صفقة وحساب الربح الصافي</button>
+            <button class="btn" style="background:var(--primary); margin-top:8px;" onclick="payAppSubscription()" id="btn-sub-pay">★ تجديد اشتراك التطبيق (7$) عبر EVC</button>
+        </section>
+
+        <!-- الإعدادات -->
+        <section id="view-settings" class="view">
+            <h2 id="lbl-set-title" style="font-size: 1rem; margin-bottom: 8px; color: var(--primary);">الإعدادات والأمان</h2>
+            
+            <label id="lbl-merch-phone">رقم دكانك (لتوجيه تحصيلات EVC Plus إليك):</label>
+            <input type="text" id="merchant-phone-input" placeholder="مثال: +25261xxxxxxx" onchange="saveMerchantPhone(this.value)">
+
+            <label id="lbl-bank-info">رقم الحساب البنكي (اختياري / للمستقبل):</label>
+            <input type="text" id="bank-account-input" placeholder="مثال: IBAN أو رقم الحساب البنكي" onchange="saveBankAccount(this.value)">
+
+            <label id="lbl-lang-select">لغة الواجهة (المصطلحات التجارية والمالية دقيقة):</label>
+            <select id="lang-sel" onchange="changeLang(this.value)">
+                <option value="ar">العربية (Arabic)</option>
+                <option value="so">Soomaali (الصومالية)</option>
+                <option value="en">English (الإنجليزية)</option>
+                <option value="sw">Kiswahili (السواحيلية)</option>
+                <option value="fr">Français (الفرنسية)</option>
+                <option value="es">Español (الإسبانية)</option>
+                <option value="ru">Русский (Русский)</option>
+                <option value="am">አማርኛ (الإثيوبية)</option>
+                <option value="as">亚洲/Asians (اللغات الآسيوية)</option>
+            </select>
+            
+            <button class="btn" style="background:var(--primary);" onclick="promptChangePin()" id="btn-change-pin">تغيير كلمة المرور / رمز الأمان (PIN)</button>
+            <button class="btn" style="background:var(--danger); margin-top: 10px;" onclick="resetData()" id="btn-reset">تفريغ وحذف كافة السجلات</button>
+
+            <!-- الهوية البرمجية والتطوير المستمر داخل صفحة الإعدادات -->
+            <div class="dev-signature-box">
+                <strong>⚡ الهوية البرمجية والتطوير المستمر (AI-Ready):</strong><br>
+                • المهندس / المطور: <strong>محسن / عبد الخبير</strong><br>
+                • الإصدار: Zimmah Pro v2.5 (Modular Architecture)<br>
+                • قابلية التوسع: مهيأ كلياً للحقن الذكي للأكواد وتكامل الذكاء الاصطناعي مستقبلاً.
+            </div>
+        </section>
+    </main>
+
+    <nav>
+        <button class="nav-btn active" onclick="switchView('home')" id="nav-home"><span>🏠</span><span id="nav-txt-home">الرئيسية</span></button>
+        <button class="nav-btn" onclick="switchView('customers')" id="nav-customers"><span>👥</span><span id="nav-txt-cust">الزبائن</span></button>
+        <button class="nav-btn" onclick="switchView('profit')" id="nav-profit"><span>⭐</span><span id="nav-txt-pro">الاحترافية</span></button>
+        <button class="nav-btn" onclick="switchView('settings')" id="nav-settings"><span>⚙️</span><span id="nav-txt-set">الإعدادات</span></button>
+    </nav>
+
+    <script>
+        // -------------------------------------------------------------------------
+        // Developer Signature & AI-Ready Extensibility Engine
+        // Author: محسن / عبد الخبير
+        // Architecture: Modular, Extensible, Secure PIN Engine, Multi-Currency/Language
+        // -------------------------------------------------------------------------
+        let isPrivate = false;
+        let db = JSON.parse(localStorage.getItem('zimmah_master_db')) || {
+            customers: [],
+            cashDrawer: 0,
+            profitToday: 0,
+            expensesToday: 0,
+            pin: "1234",
+            merchantPhone: "",
+            bankAccount: "",
+            lang: "ar"
+        };
+
+        const DEVELOPER_NUMBER = "+252613938202";
+
+        const translations = {
+            ar: {
+                title: "ذِمّــــة (Zimmah Pro)", subtitle: "النظام المالي وحماية الديون",
+                totalDebt: "إجمالي الديون المعلقة", dailyProfit: "صافي الأرباح اليومية",
+                addCustBtn: "+ إضافة زبون / تسجيل دين جديد", evcQuick: "⚡ تحصيل سريع عبر EVC Plus",
+                custTitle: "إدارة الزبائن والوثائق والرهن", newCustBtn: "+ إضافة زبون مع ضمان رقمي",
+                proTitle: "الباقة الاحترافية (7$ / شهرياً)", drawer: "إجمالي مبيعات الصندوق اليوم",
+                addProfit: "+ تسجيل صفقة وحساب الربح الصافي", subPay: "★ تجديد اشتراك التطبيق (7$) عبر EVC",
+                setTitle: "الإعدادات والأمان", merchPhone: "رقم دكانك (لتوجيه تحصيلات EVC Plus إليك):",
+                bankInfo: "رقم الحساب البنكي (اختياري / للمستقبل):",
+                langSel: "لغة الواجهة:", changePin: "تغيير كلمة المرور / رمز الأمان (PIN)", reset: "تفريغ وحذف كافة السجلات",
+                navHome: "الرئيسية", navCust: "الزبائن", navPro: "الاحترافية", navSet: "الإعدادات",
+                safe: "آمن", highRisk: "عالي المخاطر", addExpenseBtn: "📉 تسجيل مصروفات نثريات يومية"
+            },
+            so: {
+                title: "Zimmah Pro", subtitle: "Nidaamka Maaliyadda & Deymaha",
+                totalDebt: "Wadarta Deymaha Maqan", dailyProfit: "Faa'iidada Maalinlaha ah",
+                addCustBtn: "+ Ku dar Macmiil / Deyn Cusub", evcQuick: "⚡ Lacag Ururinta EVC Plus",
+                custTitle: "Maareynta Macamiisha & Dammaanadda", newCustBtn: "+ Ku dar Macmiil cusub",
+                proTitle: "Xirmada Pro ($7 / Bishii)", drawer: "Wadarta Iibka Maanta",
+                addProfit: "+ Diiwaangeli Ganacsi & Faa'iido", subPay: "★ Cusbooneysii App-ka ($7) via EVC",
+                setTitle: "Dejinta & Ammaanka", merchPhone: "Lambarka Dukaanadaada (EVC Plus):",
+                bankInfo: "Lambarka Xisaabta Bangiga (Ikhtiyaari):",
+                langSel: "Luuqadda:", changePin: "Beddel Lambarka Sireed (PIN)", reset: "Tirtir Dhammaan Xogta",
+                navHome: "Hoyga", navCust: "Macamiisha", navPro: "Pro", navSet: "Dejinta",
+                safe: "Ammaan", highRisk: "Halis Sare", addExpenseBtn: "📉 Diiwaangeli Kharashka Maalinlaha ah"
+            },
+            en: {
+                title: "Zimmah Pro", subtitle: "Financial & Debt Management",
+                totalDebt: "Total Pending Debt", dailyProfit: "Daily Net Profit",
+                addCustBtn: "+ Add Customer / New Debt", evcQuick: "⚡ Quick EVC Plus Collection",
+                custTitle: "Customers & Digital Collateral", newCustBtn: "+ Add Customer with Collateral",
+                proTitle: "Pro Package ($7 / Month)", drawer: "Total Today's Cash Drawer",
+                addProfit: "+ Record Deal & Calculate Profit", subPay: "★ Renew App Subscription ($7)",
+                setTitle: "Settings & Security", merchPhone: "Your Shop Phone (For EVC Collections):",
+                bankInfo: "Bank Account Number (Optional / Future):",
+                langSel: "Interface Language:", changePin: "Change Security PIN", reset: "Clear All Records",
+                navHome: "Home", navCust: "Customers", navPro: "Pro", navSet: "Settings",
+                safe: "Safe", highRisk: "High Risk", addExpenseBtn: "📉 Record Daily Petty Expenses"
+            },
+            sw: {
+                title: "Zimmah Pro", subtitle: "Mfumo wa Fedha na Madeni",
+                totalDebt: "Jumla ya Madeni", dailyProfit: "Faida Halisi ya Leo",
+                addCustBtn: "+ Ongeza Mteja / Deni Jipya", evcQuick: "⚡ Ukusanyaji wa EVC Plus",
+                custTitle: "Usimamizi wa Wateja na Dhamana", newCustBtn: "+ Ongeza Mteja na Dhamana",
+                proTitle: "Kifurushi cha Pro ($7 / Mwezi)", drawer: "Jumla ya Mauzo ya Leo",
+                addProfit: "+ Rekodi Biashara na Faida", subPay: "★ Lipia Usajili wa App ($7)",
+                setTitle: "Mipangilio na Usalama", merchPhone: "Namba ya Duka Lako (EVC Plus):",
+                bankInfo: "Namba ya Akaunti ya Benki (Hiari):",
+                langSel: "Lugha:", changePin: "Badilisha Nenosiri la Usalama (PIN)", reset: "Futa Kumbukumbu Zote",
+                navHome: "Nyumbani", navCust: "Wateja", navPro: "Pro", navSet: "Mipangilio",
+                safe: "Salama", highRisk: "Hatari Kubwa", addExpenseBtn: "📉 Rekodi Matumizi Madogo"
+            },
+            fr: {
+                title: "Zimmah Pro", subtitle: "Gestion Financière et des Dettes",
+                totalDebt: "Dette Totale en Attente", dailyProfit: "Bénéfice Net Quotidien",
+                addCustBtn: "+ Ajouter Client / Nouvelle Dette", evcQuick: "⚡ Collecte Rapide EVC Plus",
+                custTitle: "Clients et Garantie Numérique", newCustBtn: "+ Ajouter Client avec Garantie",
+                proTitle: "Pack Pro ($7 / Mois)", drawer: "Total Caisse du Jour",
+                addProfit: "+ Enregistrer Vente & Bénéfice", subPay: "★ Renouveler l'abonnement ($7)",
+                setTitle: "Paramètres et Sécurité", merchPhone: "Numéro de votre boutique (EVC Plus):",
+                bankInfo: "Numéro de compte bancaire (Optionnel):",
+                langSel: "Langue de l'interface:", changePin: "Changer le PIN de Sécurité", reset: "Effacer Toutes les Données",
+                navHome: "Accueil", navCust: "Clients", navPro: "Pro", navSet: "Paramètres",
+                safe: "Sûr", highRisk: "Haut Risque", addExpenseBtn: "📉 Enregistrer les Dépenses"
+            },
+            es: {
+                title: "Zimmah Pro", subtitle: "Gestión Financiera y de Deudas",
+                totalDebt: "Deuda Total Pendiente", dailyProfit: "Beneficio Neto Diario",
+                addCustBtn: "+ Añadir Cliente / Nueva Deuda", evcQuick: "⚡ Cobro Rápido EVC Plus",
+                custTitle: "Clientes y Garantía Digital", newCustBtn: "+ Añadir Cliente con Garantía",
+                proTitle: "Paquete Pro ($7 / Mes)", drawer: "Caja Total de Hoy",
+                addProfit: "+ Registrar Venta y Calcular", subPay: "★ Renovar Suscripción ($7)",
+                setTitle: "Ajustes y Seguridad", merchPhone: "Teléfono de tu tienda (EVC Plus):",
+                bankInfo: "Número de cuenta bancaria (Opcional):",
+                langSel: "Idioma de la interfaz:", changePin: "Cambiar PIN de Seguridad", reset: "Borrar Todos los Registros",
+                navHome: "Inicio", navCust: "Clientes", navPro: "Pro", navSet: "Ajustes",
+                safe: "Seguro", highRisk: "Alto Riesgo", addExpenseBtn: "📉 Registrar Gastos Diarios"
+            },
+            ru: {
+                title: "Zimmah Pro", subtitle: "Управление финансами и долгами",
+                totalDebt: "Всего неоплаченных долгов", dailyProfit: "Чистая прибыль за день",
+                addCustBtn: "+ Добавить клиента / Долг", evcQuick: "⚡ Быстрый сбор EVC Plus",
+                custTitle: "Клиенты и цифровой залог", newCustBtn: "+ Добавить с залогом",
+                proTitle: "Pro Пакет ($7 / месяц)", drawer: "Итого в кассе за сегодня",
+                addProfit: "+ Записать сделку и прибыль", subPay: "★ Продлить подписку ($7)",
+                setTitle: "Настройки и безопасность", merchPhone: "Номер вашего магазина (EVC Plus):",
+                bankInfo: "Номер банковского счета (Необязательно):",
+                langSel: "Язык интерфейса:", changePin: "Изменить PIN безопасности", reset: "Очистить все записи",
+                navHome: "Главная", navCust: "Клиенты", navPro: "Pro", navSet: "Настройки",
+                safe: "Безопасно", highRisk: "Высокий риск", addExpenseBtn: "📉 Записать расходы"
+            },
+            am: {
+                title: "Zimmah Pro", subtitle: "የገንዘብ እና የእዳ አስተዳደር ስርዓት",
+                totalDebt: "ጠቅላላ የቀሩ እዳዎች", dailyProfit: "የዕለት ንጹህ ትርፍ",
+                addCustBtn: "+ ደንበኛ ጨምር / አዲስ እዳ", evcQuick: "⚡ ፈጣን EVC Plus ክፍያ",
+                custTitle: "ደንበኞች እና ዋስትናዎች", newCustBtn: "+ ደንበኛ ከዋስትና ጋር",
+                proTitle: "ፕሮ ፓኬጅ ($7 / በወር)", drawer: "የዛሬ ጠቅላላ የገንዘብ መጠን",
+                addProfit: "+ ንግድ መዝግብ እና ትርፍ አስላ", subPay: "★ መተግበሪያውን እድስ ($7)",
+                setTitle: "ቅንብሮች እና ደህንነት", merchPhone: "የሱቅዎ ስልክ ቁጥር (EVC Plus):",
+                bankInfo: "የባንክ ሂሳብ ቁጥር (አማራጭ):",
+                langSel: "የመተግበሪያ ቋንቋ:", changePin: "የሚስጥር ቁጥር (PIN) ቀይር", reset: "ሁሉንም መዝገቦች ሰርዝ",
+                navHome: "መነሻ", navCust: "ደንበኞች", navPro: "ፕሮ", navSet: "ቅንብሮች",
+                safe: "ደህንነቱ የተጠበቀ", highRisk: "ከፍተኛ አደጋ", addExpenseBtn: "📉 የዕለት ወጪዎችን መዝግብ"
+            },
+            as: {
+                title: "Zimmah Pro (亚洲)", subtitle: "财务与债务管理系统",
+                totalDebt: "未结总债务", dailyProfit: "今日净利润",
+                addCustBtn: "+ 添加客户 / 记录新债务", evcQuick: "⚡ EVC Plus 快速收款",
+                custTitle: "客户管理与数字抵押", newCustBtn: "+ 添加带抵押客户",
+                proTitle: "专业版套餐 ($7/月)", drawer: "今日现金抽屉总额",
+                addProfit: "+ 记录交易并计算利润", subPay: "★ 续订应用 ($7)",
+                setTitle: "设置与安全", merchPhone: "您的店铺电话 (EVC Plus收款):",
+                bankInfo: "银行账户号码 (可选):",
+                langSel: "界面语言:", changePin: "更改安全密码 (PIN)", reset: "清空所有记录",
+                navHome: "首页", navCust: "客户", navPro: "专业版", navSet: "设置",
+                safe: "安全", highRisk: "高风险", addExpenseBtn: "📉 记录每日零星支出"
+            }
+        };
+
+        document.getElementById('merchant-phone-input').value = db.merchantPhone || "";
+        document.getElementById('bank-account-input').value = db.bankAccount || "";
+        document.getElementById('lang-sel').value = db.lang || "ar";
+        applyLanguage(db.lang || "ar");
+
+        function checkPin() {
+            let input = document.getElementById('pin-input').value;
+            if(input === db.pin) {
+                document.getElementById('lock-screen').style.display = 'none';
+            } else {
+                alert("رمز الحماية غير صحيح! يرجى المحاولة مرة أخرى.");
+            }
+        }
+
+        function promptChangePin() {
+            let oldPin = prompt("أدخل رمز الحماية الحالي:");
+            if(oldPin === db.pin) {
+                let newPin = prompt("أدخل رمز الحماية الجديد (4 أرقام):");
+                if(newPin && newPin.length >= 4) {
+                    db.pin = newPin;
+                    persist();
+                    alert("تم تغيير رمز الحماية (PIN) بنجاح.");
+                } else {
+                    alert("الرمز يجب ألا يقل عن 4 أرقام.");
+                }
+            } else {
+                alert("رمز الحماية الحالي غير صحيح!");
+            }
+        }
+
+        function persist() {
+            localStorage.setItem('zimmah_master_db', JSON.stringify(db));
+            render();
+        }
+
+        function saveMerchantPhone(phone) {
+            db.merchantPhone = phone;
+            persist();
+            alert("تم حفظ رقم دكانك بنجاح لتحصيلات EVC Plus.");
+        }
+
+        function saveBankAccount(acc) {
+            db.bankAccount = acc;
+            persist();
+            alert("تم حفظ معلومات الحساب البنكي للمستقبل بنجاح.");
+        }
+
+        function changeLang(lang) {
+            db.lang = lang;
+            persist();
+            applyLanguage(lang);
+        }
+
+        function applyLanguage(lang) {
+            let t = translations[lang] || translations.ar;
+            document.getElementById('app-title').innerText = t.title;
+            document.getElementById('app-subtitle').innerText = t.subtitle;
+            document.getElementById('lbl-total-debt').innerText = t.totalDebt;
+            document.getElementById('lbl-daily-profit').innerText = t.dailyProfit;
+            document.getElementById('btn-add-cust').innerText = t.addCustBtn;
+            document.getElementById('btn-evc-quick').innerText = t.evcQuick;
+            document.getElementById('btn-add-expense').innerText = t.addExpenseBtn;
+            document.getElementById('lbl-cust-title').innerText = t.custTitle;
+            document.getElementById('btn-new-cust').innerText = t.newCustBtn;
+            document.getElementById('lbl-pro-title').innerText = t.proTitle;
+            document.getElementById('lbl-drawer').innerText = t.drawer;
+            document.getElementById('btn-add-profit').innerText = t.addProfit;
+            document.getElementById('btn-sub-pay').innerText = t.subPay;
+            document.getElementById('lbl-set-title').innerText = t.setTitle;
+            document.getElementById('lbl-merch-phone').innerText = t.merchPhone;
+            document.getElementById('lbl-bank-info').innerText = t.bankInfo;
+            document.getElementById('lbl-lang-select').innerText = t.langSel;
+            document.getElementById('btn-change-pin').innerText = t.changePin;
+            document.getElementById('btn-reset').innerText = t.reset;
+            document.getElementById('nav-txt-home').innerText = t.navHome;
+            document.getElementById('nav-txt-cust').innerText = t.navCust;
+            document.getElementById('nav-txt-pro').innerText = t.navPro;
+            document.getElementById('nav-txt-set').innerText = t.navSet;
+            
+            if(['ar', 'am'].includes(lang)) {
+                document.documentElement.setAttribute('dir', 'rtl');
+            } else {
+                document.documentElement.setAttribute('dir', 'ltr');
+            }
+            render();
+        }
+
+        function switchView(v) {
+            document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById('view-' + v).classList.add('active');
+            document.getElementById('nav-' + v).classList.add('active');
+        }
+
+        function togglePrivacy() {
+            isPrivate = !isPrivate;
+            document.querySelectorAll('.val, .badge').forEach(el => {
+                if(isPrivate) el.classList.add('masked');
+                else el.classList.remove('masked');
+            });
+        }
+
+        function toggleDemo() {
+            if(db.customers.length === 0) {
+                db.customers = [
+                    { name: "محمد فارح", phone: "+252610000000", debt: 2200, score: "آمن", collateral: "رخصة قيادة" },
+                    { name: "عمر حسن", phone: "+252611111111", debt: 3450, score: "عالي المخاطر", collateral: "ضمان عيني" }
+                ];
+                db.cashDrawer = 1200;
+                db.profitToday = 340;
+                alert("تم تفعيل وضع التجربة الفورية بنجاح!");
+            } else {
+                db.customers = [];
+                db.cashDrawer = 0;
+                db.profitToday = 0;
+                alert("تم تفريغ بيانات التجربة.");
+            }
+            persist();
+        }
+
+        function addCustomer() {
+            let name = prompt("أدخل اسم الزبون:");
+            if(!name) return;
+            let debt = parseFloat(prompt("قيمة الدين المستحق:") || 0);
+            let phone = prompt("رقم الهاتف (للـ WhatsApp):") || "";
+            let collateral = prompt("نوع الرهن أو الضمان الرقمي (مثال: رخصة، بطاقة):") || "لا يوجد";
+            let score = debt > 3000 ? "عالي المخاطر" : "آمن";
+            
+            db.customers.push({ name, phone, debt, collateral, score });
+            persist();
+        }
+
+        function addExpense() {
+            let exp = parseFloat(prompt("أدخل قيمة المصروفات النثرية اليومية:") || 0);
+            if(exp > 0) {
+                db.expensesToday = (db.expensesToday || 0) + exp;
+                db.profitToday -= exp;
+                persist();
+                alert(`تم تسجيل المصروفات بقيمة ${exp} بنجاح.`);
+            }
+        }
+
+        function triggerEVC() {
+            if(!db.merchantPhone) {
+                alert("يرجى إدخال رقم دكانك أولاً في صفحة (الإعدادات) لتحويل الأموال إليه.");
+                switchView('settings');
+                return;
+            }
+            let customerPhone = prompt("أدخل رقم هاتف الزبون لتحصيل الدفعة:");
+            if(!customerPhone) return;
+            let amount = prompt("أدخل المبلغ المراد تحصيله:");
+            if(!amount) return;
+            
+            let ussdCode = `*711*${customerPhone}*${amount}#`;
+            try {
+                window.location.href = `tel:${ussdCode}`;
+            } catch(e) {
+                navigator.clipboard.writeText(ussdCode);
+                alert("تم نسخ كود التحصيل للحافظة: " + ussdCode);
+            }
+        }
+
+        function payAppSubscription() {
+            let amountUSD = 7;
+            alert("سيتم تحويلك لدفع اشتراك الباقة الاحترافية (7$) إلى حساب المطور.");
+            window.location.href = `tel:*711*${DEVELOPER_NUMBER}*${amountUSD}#`;
+        }
+
+        function addProfitEntry() {
+            let sale = parseFloat(prompt("سعر بيع البضاعة:") || 0);
+            let cost = parseFloat(prompt("تكلفة الشراء الأصلية:") || 0);
+            if(sale > cost) {
+                let profit = sale - cost;
+                db.profitToday += profit;
+                db.cashDrawer += sale;
+                persist();
+                alert(`تم تسجيل الصفقة بنجاح. صافي الربح: ${profit}`);
+            }
+        }
+
+        function exportBackup() {
+            let data = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
+            let a = document.createElement('a');
+            a.href = data;
+            a.download = "Zimmah_Pro_Secure_Backup.json";
+            a.click();
+            alert("تم تنزيل النسخة الاحتياطية بنجاح.");
+        }
+
+        function resetData() {
+            if(confirm("تحذير: هل أنت متأكد من حذف كافة السجلات نهائياً؟")) {
+                db = { customers: [], cashDrawer: 0, profitToday: 0, expensesToday: 0, pin: db.pin, merchantPhone: db.merchantPhone, bankAccount: db.bankAccount, lang: db.lang };
+                persist();
+            }
+        }
+
+        function render() {
+            let totalDebt = db.customers.reduce((s, c) => s + c.debt, 0);
+            document.getElementById('total-debt').innerText = totalDebt.toFixed(2);
+            document.getElementById('daily-profit').innerText = db.profitToday.toFixed(2);
+            document.getElementById('cash-drawer').innerText = db.cashDrawer.toFixed(2);
+
+            let html = "";
+            if(db.customers.length === 0) {
+                html = '<div style="text-align: center; color: var(--muted); margin-top: 25px;">لا يوجد زبائن مسجلون حالياً. اضغط على زر ⚡ للتجربة الفورية.</div>';
+            } else {
+                db.customers.forEach(c => {
+                    let badgeClass = c.score === 'عالي المخاطر' ? 'badge badge-risk' : 'badge';
+                    html += `
+                        <div class="item">
+                            <div>
+                                <strong>${c.name}</strong> <span class="${badgeClass}">${c.score}</span><br>
+                                <span style="font-size: 0.7rem; color: var(--muted);">الرهن: ${c.collateral} | ${c.phone}</span>
+                            </div>
+                            <div style="text-align: left;">
+                                <span class="badge" style="color:var(--danger); background:#fee2e2;">${c.debt}</span><br>
+                                <button onclick="window.open('https://wa.me/${c.phone}?text=مرحباً ${encodeURIComponent(c.name)}، نذكركم بأن إجمالي الدين المستحق هو ${c.debt} موثق في ذمتكم.')" style="background:none; border:none; color:var(--success); font-size:0.7rem; cursor:pointer; margin-top:2px;">💬 كشف حساب / واتساب</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            document.getElementById('customers-list').innerHTML = html;
+        }
+
+        render();
+    </script>
+</body>
+</html>
