@@ -1,118 +1,140 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="so" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zimmah Pro - متجر البركة للتجارة</title>
+    <title>Zimmah - متجر البركة للتجارة</title>
     <style>
         body { font-family: Arial, sans-serif; background: #f4f6f9; margin: 0; padding-bottom: 70px; direction: ltr; }
         
-        /* شريط التنقل العلوي الأخضر تماماً كما في تصميمك */
-        .top-nav-bar { background: #064e3b; color: white; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; }
-        .top-nav-icons { display: flex; gap: 8px; align-items: center; }
-        .icon-btn { background: #047857; border: none; color: white; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 14px; }
-        .store-badge { background: #047857; padding: 6px 12px; border-radius: 20px; display: flex; align-items: center; gap: 8px; font-size: 14px; }
-        .store-letter { background: #022c22; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        /* شريط التنقل العلوي الأصلي الدقيق */
+        .top-bar { background: #064e3b; color: white; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; }
+        .top-icons { display: flex; gap: 4px; align-items: center; }
+        .top-btn { background: #047857; border: none; color: white; width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; }
+        .store-info { display: flex; align-items: center; gap: 8px; background: #047857; padding: 4px 10px; border-radius: 20px; }
+        .store-text { text-align: right; }
+        .store-title { font-size: 13px; font-weight: bold; }
+        .store-subtitle { font-size: 9px; opacity: 0.8; }
+        .store-avatar { background: #022c22; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; }
 
         .container { max-width: 480px; margin: 10px auto; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         
-        /* الأقسام والمكونات */
-        .section-box { border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px; margin-bottom: 12px; background: #fff; }
-        .section-title { font-size: 14px; font-weight: bold; color: #1f2937; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
-        
-        input { width: 100%; padding: 10px; margin-bottom: 8px; border: 1px solid #d1d5db; border-radius: 6px; box-sizing: border-box; font-size: 13px; }
+        .section-title { font-size: 14px; font-weight: bold; color: #064e3b; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+        input, select { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #d1d5db; border-radius: 6px; box-sizing: border-box; font-size: 13px; }
         
         .btn-green { background: #10b981; color: white; border: none; width: 100%; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-bottom: 8px; }
         .btn-green:hover { background: #059669; }
+        .btn-danger { background: #ef4444; color: white; border: none; width: 100%; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; }
         
-        .btn-blue { background: #2563eb; color: white; border: none; width: 100%; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-bottom: 8px; }
-        .btn-purple { background: #7c3aed; color: white; border: none; width: 100%; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-bottom: 8px; }
-        .btn-orange { background: #d97706; color: white; border: none; width: 100%; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-bottom: 8px; }
+        .card-box { border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px; margin-bottom: 12px; background: #fff; }
+        .helper-text { font-size: 12px; color: #6b7280; text-align: center; margin-top: 5px; }
 
-        .helper-text { font-size: 12px; color: #6b7280; text-align: center; margin-bottom: 8px; }
-
-        /* شريط التنقل السفلي بالعربية تماماً كما طلبت */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-around; padding: 8px 0; box-shadow: 0 -2px 5px rgba(0,0,0,0.05); direction: rtl; }
-        .nav-item { text-align: center; color: #4b5563; text-decoration: none; font-size: 12px; }
+        /* شريط التنقل السفلي بالعربية كما في الأصل */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-around; padding: 8px 0; box-shadow: 0 -2px 5px rgba(0,0,0,0.05); direction: rtl; z-index: 1000; }
+        .nav-item { text-align: center; color: #4b5563; text-decoration: none; font-size: 11px; cursor: pointer; }
         .nav-item.active { color: #064e3b; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <!-- شريط الأدوات العلوي المطابق لصورتك تماماً -->
-    <div class="top-nav-bar">
-        <div class="top-nav-icons">
-            <button class="icon-btn" title="Settings">⚙️</button>
-            <button class="icon-btn" title="Lock">🔒</button>
-            <button class="icon-btn" title="Browser">🌐</button>
-            <button class="icon-btn" title="History">🕒</button>
-            <button class="icon-btn" title="View">👁️</button>
+    <!-- شريط الأدوات العلوي الأصلي المطابق تماماً -->
+    <div class="top-bar">
+        <div class="top-icons">
+            <button class="top-btn" title="Settings">⚙️</button>
+            <button class="top-btn" title="Lock">🔒</button>
+            <button class="top-btn" title="Browser">🌐</button>
+            <button class="top-btn" title="History">🕒</button>
+            <button class="top-btn" title="View">👁️</button>
         </div>
-        <div class="store-badge">
-            <div style="text-align: right;">
-                <div style="font-weight: bold; font-size: 13px;">Zimmah</div>
-                <div style="font-size: 10px; opacity: 0.8;">متجر البركة للتجارة</div>
+        <div class="store-info">
+            <div class="store-text">
+                <div class="store-title">Zimmah</div>
+                <div class="store-subtitle">متجر البركة للتجارة</div>
             </div>
-            <div class="store-letter">ذ</div>
+            <div class="store-avatar">ذ</div>
         </div>
     </div>
 
-    <!-- محتوى التطبيق الأساسي -->
-    <div class="container">
-        
-        <!-- قسم تسجيل ديون الزبائن -->
-        <div class="section-box">
+    <!-- محتوى التطبيق -->
+    <div class="container" id="app-content">
+        <!-- شاشة تسجيل ديون الزبائن الافتراضية -->
+        <div class="card-box">
             <div class="section-title">✏️ Recording customer debts</div>
-            <input type="text" placeholder="Customer name">
-            <input type="number" placeholder="Amount due">
-            <button class="btn-green">Add a new debt to the ledger</button>
-            <div class="helper-text">There are no debts currently recorded in the book.</div>
+            <input type="text" id="custName" placeholder="Customer name">
+            <input type="number" id="custAmount" placeholder="Amount due">
+            <button class="btn-green" onclick="addDebt()">Add a new debt to the ledger</button>
+            <div class="helper-text" id="debtStatus">There are no debts currently recorded in the book.</div>
         </div>
 
-        <!-- قسم الحماية السحابية -->
-        <div class="section-box" style="border-color: #93c5fd;">
+        <div class="card-box">
             <div class="section-title">🔒 Protect and store your debts in the cloud</div>
-            <input type="text" placeholder="Associated phone number">
+            <input type="text" placeholder="Associated phone number" value="613938202">
             <input type="password" placeholder="Secret emergency key">
             <button class="btn-green">Securely save and link your account</button>
-            <button class="btn-blue">Data recovery for a new device</button>
         </div>
-
-        <!-- مؤشر التعاون وثقة المجتمع -->
-        <div class="section-box" style="border-color: #c4b5fd;">
-            <div class="section-title">🤝 Cooperation and the Community Trust Index</div>
-            <input type="text" placeholder="Partner or family name for sharing">
-            <button class="btn-purple">Sharing the journal entry with the partner</button>
-            <div class="helper-text" style="color: #059669; font-weight: bold;">Customer confidence indicator: Active and secure</div>
-        </div>
-
-        <!-- ميزات التاجر الماسي -->
-        <div class="section-box" style="border-color: #fde68a;">
-            <div class="section-title">⭐ Features of the paid Diamond Merchant</div>
-            <button class="btn-orange">Upgrade your account to the VIP package</button>
-        </div>
-
     </div>
 
-    <!-- شريط التنقل السفلي (باللغة العربية كما أردت) -->
+    <!-- شريط التنقل السفلي الأصلي بالعربية -->
     <div class="bottom-nav">
-        <a href="#" class="nav-item">
+        <a class="nav-item" onclick="switchTab('settings')">
             <div>⚙️</div>
             <div>الإعدادات</div>
         </a>
-        <a href="#" class="nav-item">
+        <a class="nav-item" onclick="switchTab('suppliers')">
             <div>🚚</div>
             <div>الموردون</div>
         </a>
-        <a href="#" class="nav-item">
+        <a class="nav-item" onclick="switchTab('customers')">
             <div>👥</div>
             <div>الزبائن</div>
         </a>
-        <a href="#" class="nav-item active">
+        <a class="nav-item active" onclick="switchTab('home')">
             <div>🔲</div>
             <div>الرئيسية</div>
         </a>
     </div>
 
+    <script>
+        function addDebt() {
+            let name = document.getElementById('custName').value;
+            let amount = document.getElementById('custAmount').value;
+            if(name && amount) {
+                document.getElementById('debtStatus').innerHTML = `<b>تم تسجيل دين:</b> ${name} - $${amount}`;
+                document.getElementById('custName').value = '';
+                document.getElementById('custAmount').value = '';
+            } else {
+                alert('Fadlan geli magaca iyo lacagta (الرجاء إدخال الاسم والمبلغ)');
+            }
+        }
+
+        function switchTab(tab) {
+            let content = document.getElementById('app-content');
+            if(tab === 'home') {
+                content.innerHTML = `
+                    <div class="card-box">
+                        <div class="section-title">✏️ Recording customer debts</div>
+                        <input type="text" id="custName" placeholder="Customer name">
+                        <input type="number" id="custAmount" placeholder="Amount due">
+                        <button class="btn-green" onclick="addDebt()">Add a new debt to the ledger</button>
+                        <div class="helper-text" id="debtStatus">There are no debts currently recorded in the book.</div>
+                    </div>
+                `;
+            } else if(tab === 'customers') {
+                content.innerHTML = `<div class="card-box"><div class="section-title">👥 Macamiisha / الزبائن</div><p>قائمة الزبائن والديون المسجلة.</p></div>`;
+            } else if(tab === 'suppliers') {
+                content.innerHTML = `<div class="card-box"><div class="section-title">🚚 Muruudinta / الموردون</div><p>إدارة حسابات ومستحقات الموردين.</p></div>`;
+            } else if(tab === 'settings') {
+                content.innerHTML = `
+                    <div class="card-box">
+                        <div class="section-title">⚙️ Dejinta & Ammaanka (الإعدادات والأمان)</div>
+                        <label style="font-size:12px; color:#555;">Lambarka Dukaanadaada (EVC Plus):</label>
+                        <input type="text" value="613938202">
+                        <button class="btn-green">Keydi Isbedelka</button>
+                        <button class="btn-danger" onclick="localStorage.clear(); alert('Waa la tirtiray xogta.');">Tirtir Dhammaan Xogta</button>
+                    </div>
+                `;
+            }
+        }
+    </script>
 </body>
 </html>
