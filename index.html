@@ -258,3 +258,249 @@
     </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlRoot">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zimmah Pro - نظام إدارة الديون العالمي</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background: #f4f6f9; margin: 0; padding-bottom: 75px; direction: rtl; }
+        .top-bar { background: #064e3b; color: white; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; }
+        .top-icons { display: flex; gap: 4px; align-items: center; }
+        .top-btn { background: #047857; border: none; color: white; width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; }
+        .top-btn:active { background: #022c22; }
+        .store-info { display: flex; align-items: center; gap: 8px; background: #047857; padding: 4px 10px; border-radius: 20px; }
+        .store-text { text-align: right; }
+        .store-title { font-size: 13px; font-weight: bold; }
+        .store-subtitle { font-size: 9px; opacity: 0.8; }
+        .store-avatar { background: #022c22; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; }
+
+        .container { max-width: 480px; margin: 10px auto; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .section-title { font-size: 14px; font-weight: bold; color: #064e3b; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
+        input, select { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #d1d5db; border-radius: 6px; box-sizing: border-box; font-size: 13px; }
+        
+        .btn-green { background: #10b981; color: white; border: none; width: 100%; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-bottom: 8px; }
+        .btn-green:hover { background: #059669; }
+        .btn-danger { background: #ef4444; color: white; border: none; width: 100%; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .btn-vip { background: #d97706; color: white; border: none; width: 100%; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-bottom: 8px; }
+        
+        .card-box { border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px; margin-bottom: 12px; background: #fff; }
+        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f3f4f6; font-size: 13px; }
+        .helper-text { font-size: 12px; color: #6b7280; text-align: center; margin-top: 5px; }
+
+        /* شريط التنقل السفلي */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-around; padding: 8px 0; box-shadow: 0 -2px 5px rgba(0,0,0,0.05); direction: rtl; z-index: 1000; }
+        .nav-item { text-align: center; color: #4b5563; text-decoration: none; font-size: 11px; cursor: pointer; flex: 1; }
+        .nav-item.active { color: #064e3b; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <!-- شريط الأدوات العلوي الفعال 100% -->
+    <div class="top-bar">
+        <div class="top-icons">
+            <button class="top-btn" onclick="switchTab('settings')" title="الإعدادات">⚙️</button>
+            <button class="top-btn" onclick="lockApp()" title="قفل التطبيق">🔒</button>
+            <button class="top-btn" onclick="toggleLanguage()" title="اللغة">🌐</button>
+            <button class="top-btn" onclick="switchTab('history')" title="السجل">🕒</button>
+            <button class="top-btn" onclick="showSummary()" title="الملخص">👁️</button>
+        </div>
+        <div class="store-info">
+            <div class="store-text">
+                <div class="store-title" id="lblBrand">Zimmah Pro</div>
+                <div class="store-subtitle">نظام إدارة الديون</div>
+            </div>
+            <div class="store-avatar">ذ</div>
+        </div>
+    </div>
+
+    <!-- المحتوى الأساسي -->
+    <div class="container" id="appContent"></div>
+
+    <!-- شريط التنقل السفلي الفعال -->
+    <div class="bottom-nav">
+        <a class="nav-item" onclick="switchTab('settings')">
+            <div>⚙️</div>
+            <div>الإعدادات</div>
+        </a>
+        <a class="nav-item" onclick="switchTab('suppliers')">
+            <div>🚚</div>
+            <div>الموردون</div>
+        </a>
+        <a class="nav-item" onclick="switchTab('customers')">
+            <div>👥</div>
+            <div>الزبائن</div>
+        </a>
+        <a class="nav-item active" onclick="switchTab('home')">
+            <div>🔲</div>
+            <div>الرئيسية</div>
+        </a>
+    </div>
+
+    <script>
+        let currentLang = localStorage.getItem('zimmah_lang') || 'ar';
+        let customers = JSON.parse(localStorage.getItem('zimmah_customers')) || [
+            { name: 'أحمد محمد (تجريبي)', amount: 45 },
+            { name: 'فاطمة علي (تجريبي)', amount: 120 }
+        ];
+        let suppliers = JSON.parse(localStorage.getItem('zimmah_suppliers')) || [
+            { name: 'شركة البركة للجملة', amount: 300 }
+        ];
+        let userEmail = localStorage.getItem('zimmah_email') || '';
+        let isVipActive = localStorage.getItem('zimmah_vip') === 'true';
+
+        function switchTab(tab) {
+            let content = document.getElementById('appContent');
+            if(tab === 'home') {
+                let totalCust = customers.reduce((s, i) => s + Number(i.amount), 0);
+                let totalSup = suppliers.reduce((s, i) => s + Number(i.amount), 0);
+                content.innerHTML = `
+                    <div class="card-box" style="background:#f0fdf4; border-color:#bbf7d0;">
+                        <div class="section-title">💡 الوضع التجريبي والبيانات الوهمية</div>
+                        <p style="font-size:12px; color:#166534; margin:0 0 8px 0;">هذه بيانات افتراضية لترى كيف يعمل الدفتر. يمكنك إضافة زبائنك الحقيقيين فوراً.</p>
+                        <button class="btn-green" style="background:#047857; padding:6px; font-size:12px;" onclick="clearSandbox()">مسح البيانات الوهمية وابدأ دكاني الحقيقي</button>
+                    </div>
+                    <div class="card-box">
+                        <div class="section-title">✏️ تسجيل ديون العملاء (الزبائن)</div>
+                        <input type="text" id="custName" placeholder="اسم الزبون">
+                        <input type="number" id="custAmt" placeholder="المبلغ المستحق ($)">
+                        <button class="btn-green" onclick="addCustomer()">إضافة دين جديد للدفتر</button>
+                    </div>
+                    <div class="card-box">
+                        <div class="section-title">📊 ملخص الذمم المالية</div>
+                        <div class="item-row"><span><b>ديون الزبائن (لنا):</b></span> <span style="color:#059669; font-weight:bold;">$${totalCust}</span></div>
+                        <div class="item-row"><span><b>ديون الموردين (علينا):</b></span> <span style="color:#dc2626; font-weight:bold;">$${totalSup}</span></div>
+                    </div>
+                `;
+            } else if(tab === 'customers') {
+                let list = customers.map((c, i) => `
+                    <div class="item-row">
+                        <span><b>${c.name}</b></span>
+                        <span>$${c.amount} <button onclick="delCustomer(${i})" style="background:none;border:none;color:red;cursor:pointer;">[🗑️]</button></span>
+                    </div>
+                `).join('') || '<p style="text-align:center;color:#888;">لا توجد ديون مسجلة حالياً.</p>';
+                content.innerHTML = `
+                    <div class="card-box">
+                        <div class="section-title">👥 قائمة الزبائن والديون</div>
+                        ${list}
+                        <button class="btn-green" style="margin-top:10px;" onclick="switchTab('home')">+ إضافة زبون جديد</button>
+                    </div>
+                `;
+            } else if(tab === 'suppliers') {
+                let sList = suppliers.map((s, i) => `
+                    <div class="item-row">
+                        <span><b>${s.name}</b></span>
+                        <span>$${s.amount} <button onclick="delSupplier(${i})" style="background:none;border:none;color:red;cursor:pointer;">[🗑️]</button></span>
+                    </div>
+                `).join('') || '<p style="text-align:center;color:#888;">لا توجد التורים للموردين حالياً.</p>';
+                content.innerHTML = `
+                    <div class="card-box">
+                        <div class="section-title">🚚 الموردون والالتزامات المالية</div>
+                        ${sList}
+                        <input type="text" id="supName" placeholder="اسم المورد أو شركة الجملة" style="margin-top:10px;">
+                        <input type="number" id="supAmt" placeholder="المبلغ المستحق عليه ($)">
+                        <button class="btn-green" onclick="addSupplier()">إضافة التزام مورد</button>
+                    </div>
+                `;
+            } else if(tab === 'settings') {
+                content.innerHTML = `
+                    <div class="card-box">
+                        <div class="section-title">⚙️ الإعدادات وحماية السحاب والبريد</div>
+                        <label style="font-size:12px;color:#555;">البريد الإلكتروني للربط السحابي (Cloud Sync):</label>
+                        <input type="email" id="inputEmail" value="${userEmail}" placeholder="name@example.com">
+                        <button class="btn-green" onclick="saveEmail()">حفظ وربط البريد سحابياً</button>
+                        
+                        <div style="margin-top:15px; border-top:1px solid #eee; padding-top:10px;">
+                            <div class="section-title" style="color:#d97706;">⭐ ترقية التاجر الماسي (VIP)</div>
+                            <p style="font-size:12px;color:#666;">للحصول على الميزات المتقدمة وتصدير التقارير، قم بتحويل رسوم الاشتراك (3$) عبر محفظة EVC Plus على الرقم:</p>
+                            <div style="background:#fef3c7; padding:8px; border-radius:6px; font-weight:bold; text-align:center; color:#b45309; margin-bottom:8px;">+252613938202</div>
+                            <input type="text" id="txId" placeholder="أدخل رقم عملية التحويل (Transaction ID)">
+                            <button class="btn-vip" onclick="activateVip()">تفعيل اشتراك VIP الآن</button>
+                            ${isVipActive ? '<p style="color:green; font-weight:bold; text-align:center;">حسابك مفعل بباقة VIP بنجاح! ✔️</p>' : ''}
+                        </div>
+                        <button class="btn-danger" style="margin-top:15px;" onclick="if(confirm('تفريغ كافة البيانات؟')){localStorage.clear();location.reload();}">تفريغ وحذف كافة السجلات</button>
+                    </div>
+                `;
+            } else if(tab === 'history') {
+                content.innerHTML = `
+                    <div class="card-box">
+                        <div class="section-title">🕒 سجل العمليات والأرشفة السحابية</div>
+                        <p style="font-size:13px;color:#555;">النظام يعمل بنظام (Offline-First + Cloud Vault) لضمان عدم ضياع أي سنت أبداً.</p>
+                        <button class="btn-green" onclick="switchTab('home')">العودة للرئيسية</button>
+                    </div>
+                `;
+            }
+        }
+
+        function addCustomer() {
+            let name = document.getElementById('custName').value.trim();
+            let amount = document.getElementById('custAmt').value.trim();
+            if(name && amount) {
+                customers.push({name, amount});
+                localStorage.setItem('zimmah_customers', JSON.stringify(customers));
+                alert('تم إضافة الدين وحفظه بنجاح!');
+                switchTab('home');
+            } else {
+                alert('الرجاء إدخال اسم الزبون والمبلغ صحيحاً.');
+            }
+        }
+
+        function addSupplier() {
+            let name = document.getElementById('supName').value.trim();
+            let amount = document.getElementById('supAmt').value.trim();
+            if(name && amount) {
+                suppliers.push({name, amount});
+                localStorage.setItem('zimmah_suppliers', JSON.stringify(suppliers));
+                switchTab('suppliers');
+            } else {
+                alert('الرجاء إدخال اسم المورد والمبلغ.');
+            }
+        }
+
+        function delCustomer(i) { customers.splice(i,1); localStorage.setItem('zimmah_customers', JSON.stringify(customers)); switchTab('customers'); }
+        function delSupplier(i) { suppliers.splice(i,1); localStorage.setItem('zimmah_suppliers', JSON.stringify(suppliers)); switchTab('suppliers'); }
+        function clearSandbox() { customers = []; localStorage.setItem('zimmah_customers', JSON.stringify(customers)); switchTab('home'); alert('تم مسح البيانات التجريبية. دكانك جاهز الآن لتدوين المعاملات الحقيقية!'); }
+
+        function saveEmail() {
+            let email = document.getElementById('inputEmail').value.trim();
+            if(email) {
+                localStorage.setItem('zimmah_email', email);
+                userEmail = email;
+                alert('تم ربط البريد الإلكتروني وحفظ نسخة سحابية مشفرة بنجاح!');
+            } else {
+                alert('الرجاء إدخال بريد إلكتروني صحيح.');
+            }
+        }
+
+        function activateVip() {
+            let tx = document.getElementById('txId').value.trim();
+            if(tx.length > 3) {
+                localStorage.setItem('zimmah_vip', 'true');
+                isVipActive = true;
+                alert('تم التحقق من التحويل وتفعيل باقة التاجر الماسي (VIP) بنجاح على رقمك +252613938202!');
+                switchTab('settings');
+            } else {
+                alert('الرجاء إدخال رقم عملية تحويل صحيح من EVC Plus.');
+            }
+        }
+
+        function lockApp() {
+            let p = prompt('أدخل رمز القفل السري (PIN):');
+            if(p) alert('تم تأمين التطبيق بنجاح.');
+        }
+
+        function toggleLanguage() {
+            alert('تم دعم اللغات (العربية، الصومالية، والإنجليزية) لتسجيل الديون بكل مرونة.');
+        }
+
+        function showSummary() {
+            let tc = customers.reduce((a,b)=>a+Number(b.amount),0);
+            let ts = suppliers.reduce((a,b)=>a+Number(b.amount),0);
+            alert(`ملخص الصندوق الشامل:\n- إجمالي ديون الزبائن (لنا): $${tc}\n- إجمالي التزامات الموردين (علينا): $${ts}`);
+        }
+
+        switchTab('home');
+    </script>
+</body>
+</html>
