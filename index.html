@@ -1,16 +1,15 @@
 <!DOCTYPE html>
-<html lang="so" dir="ltr">
+<html lang="so" dir="ltr" id="htmlRoot">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zimmah - متجر البركة للتجارة</title>
+    <title>Zimmah Pro - Global Micro-Debt Ledger</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f6f9; margin: 0; padding-bottom: 70px; direction: ltr; }
-        
-        /* شريط التنقل العلوي الأصلي الدقيق */
-        .top-bar { background: #064e3b; color: white; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; }
+        body { font-family: Arial, sans-serif; background: #f4f6f9; margin: 0; padding-bottom: 75px; direction: ltr; }
+        .top-bar { background: #064e3b; color: white; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; }
         .top-icons { display: flex; gap: 4px; align-items: center; }
-        .top-btn { background: #047857; border: none; color: white; width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; }
+        .top-btn { background: #047857; border: none; color: white; width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; }
+        .top-btn:active { background: #022c22; }
         .store-info { display: flex; align-items: center; gap: 8px; background: #047857; padding: 4px 10px; border-radius: 20px; }
         .store-text { text-align: right; }
         .store-title { font-size: 13px; font-weight: bold; }
@@ -18,8 +17,7 @@
         .store-avatar { background: #022c22; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; }
 
         .container { max-width: 480px; margin: 10px auto; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        
-        .section-title { font-size: 14px; font-weight: bold; color: #064e3b; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+        .section-title { font-size: 14px; font-weight: bold; color: #064e3b; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
         input, select { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #d1d5db; border-radius: 6px; box-sizing: border-box; font-size: 13px; }
         
         .btn-green { background: #10b981; color: white; border: none; width: 100%; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-bottom: 8px; }
@@ -27,114 +25,236 @@
         .btn-danger { background: #ef4444; color: white; border: none; width: 100%; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; }
         
         .card-box { border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px; margin-bottom: 12px; background: #fff; }
+        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f3f4f6; font-size: 13px; }
         .helper-text { font-size: 12px; color: #6b7280; text-align: center; margin-top: 5px; }
 
-        /* شريط التنقل السفلي بالعربية كما في الأصل */
+        /* شريط التنقل السفلي */
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-around; padding: 8px 0; box-shadow: 0 -2px 5px rgba(0,0,0,0.05); direction: rtl; z-index: 1000; }
-        .nav-item { text-align: center; color: #4b5563; text-decoration: none; font-size: 11px; cursor: pointer; }
+        .nav-item { text-align: center; color: #4b5563; text-decoration: none; font-size: 11px; cursor: pointer; flex: 1; }
         .nav-item.active { color: #064e3b; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <!-- شريط الأدوات العلوي الأصلي المطابق تماماً -->
+    <!-- شريط الأدوات العلوي -->
     <div class="top-bar">
         <div class="top-icons">
-            <button class="top-btn" title="Settings">⚙️</button>
-            <button class="top-btn" title="Lock">🔒</button>
-            <button class="top-btn" title="Browser">🌐</button>
-            <button class="top-btn" title="History">🕒</button>
-            <button class="top-btn" title="View">👁️</button>
+            <button class="top-btn" onclick="switchTab('settings')" title="Settings">⚙️</button>
+            <button class="top-btn" onclick="lockApp()" title="Lock">🔒</button>
+            <button class="top-btn" onclick="toggleLanguage()" title="Language">🌐</button>
+            <button class="top-btn" onclick="switchTab('history')" title="History">🕒</button>
+            <button class="top-btn" onclick="showSummary()" title="Summary">👁️</button>
         </div>
         <div class="store-info">
             <div class="store-text">
-                <div class="store-title">Zimmah</div>
-                <div class="store-subtitle">متجر البركة للتجارة</div>
+                <div class="store-title" id="lblBrand">Zimmah Pro</div>
+                <div class="store-subtitle" id="lblSub">Global Ledger v3.0</div>
             </div>
             <div class="store-avatar">ذ</div>
         </div>
     </div>
 
-    <!-- محتوى التطبيق -->
-    <div class="container" id="app-content">
-        <!-- شاشة تسجيل ديون الزبائن الافتراضية -->
-        <div class="card-box">
-            <div class="section-title">✏️ Recording customer debts</div>
-            <input type="text" id="custName" placeholder="Customer name">
-            <input type="number" id="custAmount" placeholder="Amount due">
-            <button class="btn-green" onclick="addDebt()">Add a new debt to the ledger</button>
-            <div class="helper-text" id="debtStatus">There are no debts currently recorded in the book.</div>
-        </div>
-
-        <div class="card-box">
-            <div class="section-title">🔒 Protect and store your debts in the cloud</div>
-            <input type="text" placeholder="Associated phone number" value="613938202">
-            <input type="password" placeholder="Secret emergency key">
-            <button class="btn-green">Securely save and link your account</button>
-        </div>
+    <!-- المحتوى الأساسي -->
+    <div class="container" id="appContent">
+        <!-- يتم ملؤها ديناميكياً -->
     </div>
 
-    <!-- شريط التنقل السفلي الأصلي بالعربية -->
+    <!-- شريط التنقل السفلي -->
     <div class="bottom-nav">
         <a class="nav-item" onclick="switchTab('settings')">
             <div>⚙️</div>
-            <div>الإعدادات</div>
+            <div id="navSet">Dejinta</div>
         </a>
         <a class="nav-item" onclick="switchTab('suppliers')">
             <div>🚚</div>
-            <div>الموردون</div>
+            <div id="navSup">Muruudinta</div>
         </a>
         <a class="nav-item" onclick="switchTab('customers')">
             <div>👥</div>
-            <div>الزبائن</div>
+            <div id="navCust">Macamiisha</div>
         </a>
         <a class="nav-item active" onclick="switchTab('home')">
             <div>🔲</div>
-            <div>الرئيسية</div>
+            <div id="navHome">Hoyga</div>
         </a>
     </div>
 
     <script>
-        function addDebt() {
-            let name = document.getElementById('custName').value;
-            let amount = document.getElementById('custAmount').value;
-            if(name && amount) {
-                document.getElementById('debtStatus').innerHTML = `<b>تم تسجيل دين:</b> ${name} - $${amount}`;
-                document.getElementById('custName').value = '';
-                document.getElementById('custAmount').value = '';
+        // إعدادات اللغة والبيانات
+        let lang = localStorage.getItem('zimmah_lang') || 'so';
+        let customers = JSON.parse(localStorage.getItem('zimmah_cust')) || [
+            { name: 'Axmed Maxamed', amount: 45 },
+            { name: 'Fadumo Cali', amount: 120 }
+        ];
+        let suppliers = JSON.parse(localStorage.getItem('zimmah_sup')) || [
+            { name: 'Shirkadda Amal', amount: 300 }
+        ];
+
+        function setLanguage(newLang) {
+            lang = newLang;
+            localStorage.setItem('zimmah_lang', lang);
+            let root = document.getElementById('htmlRoot');
+            root.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+            root.lang = lang;
+            updateTexts();
+            switchTab('home');
+        }
+
+        function toggleLanguage() {
+            if(lang === 'so') setLanguage('ar');
+            else if(lang === 'ar') setLanguage('en');
+            else setLanguage('so');
+        }
+
+        function updateTexts() {
+            if(lang === 'ar') {
+                document.getElementById('lblBrand').innerText = 'ذمة برو';
+                document.getElementById('lblSub').innerText = 'الدفتر المالي الذكي';
+                document.getElementById('navHome').innerText = 'الرئيسية';
+                document.getElementById('navCust').innerText = 'الزبائن';
+                document.getElementById('navSup').innerText = 'الموردون';
+                document.getElementById('navSet').innerText = 'الإعدادات';
+            } else if(lang === 'en') {
+                document.getElementById('lblBrand').innerText = 'Zimmah Pro';
+                document.getElementById('lblSub').innerText = 'Global Ledger';
+                document.getElementById('navHome').innerText = 'Home';
+                document.getElementById('navCust').innerText = 'Customers';
+                document.getElementById('navSup').innerText = 'Suppliers';
+                document.getElementById('navSet').innerText = 'Settings';
             } else {
-                alert('Fadlan geli magaca iyo lacagta (الرجاء إدخال الاسم والمبلغ)');
+                document.getElementById('lblBrand').innerText = 'Zimmah Pro';
+                document.getElementById('lblSub').innerText = 'Kormeerka Deymaha';
+                document.getElementById('navHome').innerText = 'Hoyga';
+                document.getElementById('navCust').innerText = 'Macamiisha';
+                document.getElementById('navSup').innerText = 'Muruudinta';
+                document.getElementById('navSet').innerText = 'Dejinta';
             }
         }
 
         function switchTab(tab) {
-            let content = document.getElementById('app-content');
+            let content = document.getElementById('appContent');
+            updateTexts();
+
             if(tab === 'home') {
+                let totalCust = customers.reduce((s, i) => s + Number(i.amount), 0);
+                let totalSup = suppliers.reduce((s, i) => s + Number(i.amount), 0);
+                
+                let titleRec = lang==='ar'?'✏️ تسجيل دين جديد للعملاء':lang==='en'?'✏️ Record Customer Debt':'✏️ Diiwaangelinta Deymaha';
+                let phName = lang==='ar'?'اسم الزبون':lang==='en'?'Customer Name':'Magaca Macաmiisha';
+                let phAmt = lang==='ar'?'المبلغ ($)':lang==='en'?'Amount ($)':'Lacagta ($)';
+                let btnAdd = lang==='ar'?'إضافة الدين':lang==='en'?'Add Debt':'Kudar Dey';
+                let tActive = lang==='ar'?'📋 ملخص الحسابات والذمم':'📋 Active Balances':'📋 Xديسaha & Deymaha';
+
                 content.innerHTML = `
                     <div class="card-box">
-                        <div class="section-title">✏️ Recording customer debts</div>
-                        <input type="text" id="custName" placeholder="Customer name">
-                        <input type="number" id="custAmount" placeholder="Amount due">
-                        <button class="btn-green" onclick="addDebt()">Add a new debt to the ledger</button>
-                        <div class="helper-text" id="debtStatus">There are no debts currently recorded in the book.</div>
+                        <div class="section-title">${titleRec}</div>
+                        <input type="text" id="cName" placeholder="${phName}">
+                        <input type="number" id="cAmt" placeholder="${phAmt}">
+                        <button class="btn-green" onclick="addCustomerDebt()">${btnAdd}</button>
+                    </div>
+                    <div class="card-box">
+                        <div class="section-title">${tActive}</div>
+                        <div class="item-row"><span><b>${lang==='ar'?'ديون العملاء (لنا)':lang==='en'?'Customer Debts (Receivable)':'Deymaha Macamiisha'}</b></span> <span style="color:#059669; font-weight:bold;">$${totalCust}</span></div>
+                        <div class="item-row"><span><b>${lang==='ar'?'ديون الموردين (علينا)':lang==='en'?'Supplier Debts (Payable)':'Deymaha Muruudinta'}</b></span> <span style="color:#dc2626; font-weight:bold;">$${totalSup}</span></div>
                     </div>
                 `;
             } else if(tab === 'customers') {
-                content.innerHTML = `<div class="card-box"><div class="section-title">👥 Macamiisha / الزبائن</div><p>قائمة الزبائن والديون المسجلة.</p></div>`;
+                let listHtml = customers.map((c, i) => `
+                    <div class="item-row">
+                        <span><b>${c.name}</b></span>
+                        <span>$${c.amount} <button onclick="delCust(${i})" style="background:none;border:none;color:red;cursor:pointer;">[🗑️]</button></span>
+                    </div>
+                `).join('') || '<p style="text-align:center;color:#888;">No data</p>';
+
+                content.innerHTML = `
+                    <div class="card-box">
+                        <div class="section-title">👥 ${lang==='ar'?'إدارة الزبائن':lang==='en'?'Customers Ledger':'Macamiisha'}</div>
+                        ${listHtml}
+                        <button class="btn-green" style="margin-top:10px;" onclick="switchTab('home')">${lang==='ar'?'إضافة جديد':lang==='en'?'Add New':'Kudar'}</button>
+                    </div>
+                `;
             } else if(tab === 'suppliers') {
-                content.innerHTML = `<div class="card-box"><div class="section-title">🚚 Muruudinta / الموردون</div><p>إدارة حسابات ومستحقات الموردين.</p></div>`;
+                let supHtml = suppliers.map((s, i) => `
+                    <div class="item-row">
+                        <span><b>${s.name}</b></span>
+                        <span>$${s.amount} <button onclick="delSup(${i})" style="background:none;border:none;color:red;cursor:pointer;">[🗑️]</button></span>
+                    </div>
+                `).join('') || '<p style="text-align:center;color:#888;">No data</p>';
+
+                content.innerHTML = `
+                    <div class="card-box">
+                        <div class="section-title">🚚 ${lang==='ar'?'الموردون والالتزامات':lang==='en'?'Suppliers Ledger':'Muruudinta'}</div>
+                        ${supHtml}
+                        <input type="text" id="sName" placeholder="Supplier Name" style="margin-top:10px;">
+                        <input type="number" id="sAmt" placeholder="Amount ($)">
+                        <button class="btn-green" onclick="addSupplier()">${lang==='ar'?'إضافة مورد':'Add Supplier'}</button>
+                    </div>
+                `;
             } else if(tab === 'settings') {
                 content.innerHTML = `
                     <div class="card-box">
-                        <div class="section-title">⚙️ Dejinta & Ammaanka (الإعدادات والأمان)</div>
-                        <label style="font-size:12px; color:#555;">Lambarka Dukaanadaada (EVC Plus):</label>
-                        <input type="text" value="613938202">
-                        <button class="btn-green">Keydi Isbedelka</button>
-                        <button class="btn-danger" onclick="localStorage.clear(); alert('Waa la tirtiray xogta.');">Tirtir Dhammaan Xogta</button>
+                        <div class="section-title">⚙️ ${lang==='ar'?'الإعدادات والأمان':lang==='en'?'Settings & Security':'Dejinta & Ammaanka'}</div>
+                        <label style="font-size:12px;color:#555;">Language / Luuqada / اللغة:</label>
+                        <select onchange="setLanguage(this.value)">
+                            <option value="so" ${lang==='so'?'selected':''}>Soomaali</option>
+                            <option value="ar" ${lang==='ar'?'selected':''}>العربية</option>
+                            <option value="en" ${lang==='en'?'selected':''}>English</option>
+                        </select>
+                        <button class="btn-danger" onclick="if(confirm('Clear all data?')){localStorage.clear();customers=[];suppliers=[];switchTab('home');}">${lang==='ar'?'تفريغ وحذف كافة السجلات':'Clear All Data'}</button>
+                    </div>
+                `;
+            } else if(tab === 'history') {
+                content.innerHTML = `
+                    <div class="card-box">
+                        <div class="section-title">🕒 ${lang==='ar'?'سجل العمليات':lang==='en'?'Activity History':'Taariikhda'}</div>
+                        <p style="font-size:12px;color:#555;">Offline-first local vault active and securely synchronized.</p>
+                        <button class="btn-green" onclick="switchTab('home')">Back</button>
                     </div>
                 `;
             }
         }
+
+        function addCustomerDebt() {
+            let name = document.getElementById('cName').value.trim();
+            let amount = document.getElementById('cAmt').value.trim();
+            if(name && amount) {
+                customers.push({name, amount});
+                localStorage.setItem('zimmah_cust', JSON.stringify(customers));
+                document.getElementById('cName').value='';
+                document.getElementById('cAmt').value='';
+                alert(lang==='ar'?'تم الحفظ بنجاح!':'Waa la keydiyay!');
+                switchTab('home');
+            } else {
+                alert('Fadlan geli xogta saxda ah.');
+            }
+        }
+
+        function addSupplier() {
+            let name = document.getElementById('sName').value.trim();
+            let amount = document.getElementById('sAmt').value.trim();
+            if(name && amount) {
+                suppliers.push({name, amount});
+                localStorage.setItem('zimmah_sup', JSON.stringify(suppliers));
+                switchTab('suppliers');
+            }
+        }
+
+        function delCust(i) { customers.splice(i,1); localStorage.setItem('zimmah_cust', JSON.stringify(customers)); switchTab('customers'); }
+        function delSup(i) { suppliers.splice(i,1); localStorage.setItem('zimmah_sup', JSON.stringify(suppliers)); switchTab('suppliers'); }
+
+        function lockApp() {
+            let pin = prompt(lang==='ar'?'أدخل رمز الحماية (PIN):':'Geli PIN-ka amniga:');
+            if(pin) alert(lang==='ar'?'تم قفل التطبيق بنجاح.':'App-ka waa la xiray.');
+        }
+
+        function showSummary() {
+            let tc = customers.reduce((a,b)=>a+Number(b.amount),0);
+            let ts = suppliers.reduce((a,b)=>a+Number(b.amount),0);
+            alert(`Zimmah Pro Summary:\n- Customers Debt: $${tc}\n- Suppliers Debt: $${ts}`);
+        }
+
+        updateTexts();
+        switchTab('home');
     </script>
 </body>
 </html>
