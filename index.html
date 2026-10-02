@@ -1,155 +1,110 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="so" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zimmah Pro - دفتر الديون الذكي v1.1.0</title>
+    <title>Zimmah Pro</title>
     <style>
-        body { font-family: Tahoma, sans-serif; background: #f4f6f9; margin: 0; padding: 15px; direction: rtl; }
-        .container { max-width: 420px; margin: auto; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: #333; margin-bottom: 5px; }
-        .badge { text-align: center; font-size: 11px; background: #e2e8f0; color: #475569; padding: 3px 8px; border-radius: 10px; display: block; margin: 0 auto 15px auto; width: fit-content; }
-        .section { background: #f8f9fa; padding: 12px; border-radius: 8px; margin-top: 12px; border: 1px solid #ddd; }
-        input, button { width: 100%; padding: 10px; margin-top: 6px; margin-bottom: 8px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 14px; }
-        button { background: #28a745; color: white; border: none; font-weight: bold; cursor: pointer; }
-        button:hover { background: #218838; }
-        .btn-secondary { background: #0284c7; }
-        .btn-vip { background: #d97706; }
-        .btn-social { background: #4f46e5; }
-        .customer-item { background: #fff; padding: 10px; margin-top: 6px; border-radius: 6px; border: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
-        p { font-size: 13px; color: #666; margin: 0 0 8px 0; }
+        body { font-family: Tahoma, sans-serif; background: #f4f6f9; margin: 0; padding-bottom: 70px; direction: ltr; }
+        .top-header { background: #064e3b; color: white; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; }
+        .container { max-width: 480px; margin: auto; background: white; padding: 15px; border-radius: 8px; margin-top: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .section-title { font-size: 15px; color: #064e3b; font-weight: bold; margin-bottom: 10px; }
+        input, select, button { width: 100%; padding: 10px; margin-top: 6px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        button { background: #064e3b; color: white; border: none; font-weight: bold; cursor: pointer; }
+        button:hover { background: #022c22; }
+        .btn-danger { background: #ef4444; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid #ddd; display: flex; justify-content: space-around; padding: 8px 0; box-shadow: 0 -2px 5px rgba(0,0,0,0.05); }
+        .nav-item { text-align: center; color: #666; text-decoration: none; font-size: 12px; }
+        .nav-item.active { color: #064e3b; font-weight: bold; }
+        .card-info { background: #f0fdf4; border: 1px solid #bbf7d0; padding: 10px; border-radius: 6px; font-size: 13px; color: #166534; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Zimmah Pro 💼</h2>
-    <span class="badge">الإصدار الشامل v1.1.0 - الأمان، الدفتر والـ VIP</span>
-
-    <!-- 1. قسم دفتر الديون الأساسي (لكل مستخدم جديد) -->
-    <div class="section">
-        <h3 style="font-size: 14px; color: #333; margin-top: 0;">تسجيل ديون العملاء 📝</h3>
-        <input type="text" id="custName" placeholder="اسم العميل">
-        <input type="number" id="custDebt" placeholder="المبلغ المستحق">
-        <button onclick="addCustomer()">إضافة دين جديد للدفتر</button>
-        <div id="customerList" style="margin-top: 10px;"></div>
+    <div class="top-header">
+        <div>
+            <span style="font-size: 16px; font-weight: bold;">Zimmah Pro</span>
+            <div style="font-size: 11px; opacity: 0.8;">Nidaamka Maaliyadda & Deymaha</div>
+        </div>
+        <div style="background: #047857; padding: 4px 8px; border-radius: 4px; font-size: 11px;">v2.5</div>
     </div>
 
-    <!-- 2. قسم الحماية المزدوجة (رقم الهاتف + مفتاح الطوارئ) -->
-    <div class="section">
-        <h3 style="font-size: 14px; color: #333; margin-top: 0;">حماية وحفظ الديون سحابياً 🔒</h3>
-        <input type="tel" id="backupPhone" placeholder="رقم الهاتف المرتبط">
-        <input type="text" id="recoveryKey" placeholder="مفتاح الطوارئ السري">
-        <button onclick="saveAdvancedBackup()">حفظ وربط الحساب بأمان</button>
-        <button onclick="restoreAccount()" class="btn-secondary">استعادة البيانات لجهاز جديد</button>
+    <div class="container" id="main-content">
+        <!-- قسم الإعدادات والأمان الرئيسي (Dejinta) -->
+        <div class="section-title">Dejinta & Ammaanka</div>
+        
+        <div class="card-info">
+            ⚡ <b>AI-Ready Architecture:</b> الهوية البرمجية والتطوير المستمر - المهندس: محسن / عبد الخبير. قابلية التوسع كلياً للحقن الذكي.
+        </div>
+
+        <label>Lambarka Dukaanadaada (EVC Plus):</label>
+        <input type="text" id="storePhone" placeholder="مثال: 25261xxxxxxx" value="613938202">
+
+        <label>Lambarka Xisaabta Bangiga (Ikhtiyaari):</label>
+        <input type="text" id="bankAccount" placeholder="أو رقم الحساب البنكي IBAN">
+
+        <label>Luuqadda:</label>
+        <select id="langSelect">
+            <option value="Soomaali">Soomaali (الصومالية)</option>
+            <option value="Arabic">العربية</option>
+        </select>
+
+        <button onclick="saveSettings()">Beddel Lambarka Sireed (PIN)</button>
+        <button onclick="clearData()" class="btn-danger">Tirtir Dhammaan Xogta</button>
     </div>
 
-    <!-- 3. قسم المشاركة والتعاون الاجتماعي (دفتر العائلة/الشركاء ومؤشر الثقة) -->
-    <div class="section" style="border: 1.5px solid #4f46e5;">
-        <h3 style="font-size: 14px; color: #4f46e5; margin-top: 0;">التعاون ومؤشر الثقة المجتمعي 🤝</h3>
-        <input type="text" id="partnerName" placeholder="اسم الشريك أو العائلة للمشاركة">
-        <button onclick="shareLedger()" class="btn-social">مشاركة سجل الدفتر مع الشريك</button>
-        <p id="trustIndex" style="margin-top: 6px; font-weight: bold; color: #333;">مؤشر الثقة للعملاء: نشط وآمن</p>
+    <!-- شريط التنقل السفلي الأصلي -->
+    <div class="bottom-nav">
+        <a href="#" class="nav-item" onclick="switchTab('hoyga')">
+            <div>🏠</div>
+            <div>Hoyga</div>
+        </a>
+        <a href="#" class="nav-item" onclick="switchTab('macamiisha')">
+            <div>👥</div>
+            <div>Macamiisha</div>
+        </a>
+        <a href="#" class="nav-item" onclick="switchTab('pro')">
+            <div>⭐</div>
+            <div>Pro</div>
+        </a>
+        <a href="#" class="nav-item active" onclick="switchTab('dejinta')">
+            <div>⚙️</div>
+            <div>Dejinta</div>
+        </a>
     </div>
 
-    <!-- 4. قسم ميزات التاجر الماسي (VIP المدفوعة) -->
-    <div class="section" style="border: 1.5px solid #f59e0b;">
-        <h3 style="font-size: 14px; color: #d97706; margin-top: 0;">ميزات التاجر الماسي المدفوعة ⭐</h3>
-        <button onclick="upgradeToVip()" class="btn-vip">ترقية الحساب إلى باقة VIP</button>
-        <button onclick="exportAccountingReport()" class="btn-vip" style="background: #b45309;">تصدير تقرير المحاسبة الاحترافي (PDF / Excel)</button>
-    </div>
-</div>
+    <script>
+        function saveSettings() {
+            let phone = document.getElementById('storePhone').value;
+            localStorage.setItem('zimmah_store_phone', phone);
+            alert('Waa la keydiyay xogta guul! (تم حفظ الإعدادات بنجاح)');
+        }
 
-<script>
-let db = JSON.parse(localStorage.getItem('zimmah_ledger_data')) || { customers: [] };
+        function clearData() {
+            if(confirm('Ma hubtaa inaad tirtirto xogta?')) {
+                localStorage.clear();
+                alert('Waa la tirtiray xogta.');
+            }
+        }
 
-function render() {
-    let listEl = document.getElementById('customerList');
-    listEl.innerHTML = '';
-    if (db.customers.length === 0) {
-        listEl.innerHTML = '<p style="text-align:center; color:#999;">لا توجد ديون مسجلة حالياً في الدفتر.</p>';
-        return;
-    }
-    db.customers.forEach((c, index) => {
-        listEl.innerHTML += `<div class="customer-item">
-            <span><strong>${c.name}</strong>: ${c.debt}</span>
-            <button style="width:auto; padding:5px 10px; background:#dc3545; margin:0;" onclick="deleteCustomer(${index})">حذف</button>
-        </div>`;
-    });
-}
-
-function addCustomer() {
-    let name = document.getElementById('custName').value.trim();
-    let debt = document.getElementById('custDebt').value.trim();
-    if (!name || !debt) {
-        alert('الرجاء إدخال اسم العميل والمبلغ بشكل صحيح.');
-        return;
-    }
-    db.customers.push({ name: name, debt: debt });
-    localStorage.setItem('zimmah_ledger_data', JSON.stringify(db));
-    document.getElementById('custName').value = '';
-    document.getElementById('custDebt').value = '';
-    render();
-}
-
-function deleteCustomer(index) {
-    db.customers.splice(index, 1);
-    localStorage.setItem('zimmah_ledger_data', JSON.stringify(db));
-    render();
-}
-
-function saveAdvancedBackup() {
-    var phone = document.getElementById('backupPhone').value.trim();
-    var key = document.getElementById('recoveryKey').value.trim();
-    if(phone.length < 7 || key.length < 4) {
-        alert('الرجاء إدخال رقم هاتف صحيح ومفتاح سري آمن للحماية.');
-        return;
-    }
-    var securePackage = { phone: phone, recoveryKey: key, data: JSON.stringify(db) };
-    localStorage.setItem('zimmah_secure_vault', JSON.stringify(securePackage));
-    alert('تم تأمين وحفظ دفتر الديون بنجاح!');
-}
-
-function restoreAccount() {
-    var phone = prompt('أدخل رقم الهاتف المرتبط:');
-    var key = prompt('أدخل مفتاح الطوارئ السري:');
-    var savedVault = localStorage.getItem('zimmah_secure_vault');
-    if(!savedVault) { alert('لا توجد بيانات محفوظة مسبقاً.'); return; }
-    var vaultData = JSON.parse(savedVault);
-    if(vaultData.phone === phone && vaultData.recoveryKey === key) {
-        db = JSON.parse(vaultData.data);
-        localStorage.setItem('zimmah_ledger_data', JSON.stringify(db));
-        render();
-        alert('تمت استعادة دفتر الديون والبيانات بنجاح تام!');
-    } else {
-        alert('خطأ في بيانات المطابقة أو المفتاح السري.');
-    }
-}
-
-function shareLedger() {
-    let partner = document.getElementById('partnerName').value.trim();
-    if(!partner) {
-        alert('الرجاء إدخال اسم الشريك أو أفراد العائلة.');
-        return;
-    }
-    alert('تم ربط ومشاركة سجل الدفتر بنجاح مع الشريك: ' + partner);
-}
-
-function upgradeToVip() {
-    alert('تم تفعيل الصلاحيات الماسية (VIP) بنجاح!');
-    localStorage.setItem('zimmah_vip_status', 'active');
-}
-
-function exportAccountingReport() {
-    if(!localStorage.getItem('zimmah_vip_status')) {
-        alert('هذه الميزة مخصصة لمشتركي باقة VIP.');
-        return;
-    }
-    alert('جاري تجهيز وتصدير تقارير المحاسبة الرسمية بصيغة Excel / PDF...');
-}
-
-render();
-</script>
-
+        function switchTab(tabName) {
+            let content = document.getElementById('main-content');
+            if(tabName === 'dejinta') {
+                content.innerHTML = `
+                    <div class="section-title">Dejinta & Ammaanka</div>
+                    <label>Lambarka Dukaanadaada (EVC Plus):</label>
+                    <input type="text" id="storePhone" value="${localStorage.getItem('zimmah_store_phone') || '613938202'}">
+                    <button onclick="saveSettings()">Keydi Isbedelka</button>
+                    <button onclick="clearData()" class="btn-danger">Tirtir Dhammaan Xogta</button>
+                `;
+            } else if(tabName === 'hoyga') {
+                content.innerHTML = `<div class="section-title">Hoyga - Dashboard</div><p>Soo dhawoow تطبيق زمة برو الأساسي لإدارة المتاجر.</p>`;
+            } else if(tabName === 'macamiisha') {
+                content.innerHTML = `<div class="section-title">Macamiisha - Dejinta Deymaha</div><p>قائمة الزبائن والديون المسجلة.</p>`;
+            } else if(tabName === 'pro') {
+                content.innerHTML = `<div class="section-title">Zimmah Pro VIP</div><p>ميزات التاجر الماسي والتقارير المتقدمة وتصدير Excel/PDF.</p>`;
+            }
+        }
+    </script>
 </body>
 </html>
