@@ -1,110 +1,118 @@
 <!DOCTYPE html>
-<html lang="so" dir="ltr">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zimmah Pro</title>
+    <title>Zimmah Pro - متجر البركة للتجارة</title>
     <style>
-        body { font-family: Tahoma, sans-serif; background: #f4f6f9; margin: 0; padding-bottom: 70px; direction: ltr; }
-        .top-header { background: #064e3b; color: white; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; }
-        .container { max-width: 480px; margin: auto; background: white; padding: 15px; border-radius: 8px; margin-top: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .section-title { font-size: 15px; color: #064e3b; font-weight: bold; margin-bottom: 10px; }
-        input, select, button { width: 100%; padding: 10px; margin-top: 6px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
-        button { background: #064e3b; color: white; border: none; font-weight: bold; cursor: pointer; }
-        button:hover { background: #022c22; }
-        .btn-danger { background: #ef4444; }
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid #ddd; display: flex; justify-content: space-around; padding: 8px 0; box-shadow: 0 -2px 5px rgba(0,0,0,0.05); }
-        .nav-item { text-align: center; color: #666; text-decoration: none; font-size: 12px; }
+        body { font-family: Arial, sans-serif; background: #f4f6f9; margin: 0; padding-bottom: 70px; direction: ltr; }
+        
+        /* شريط التنقل العلوي الأخضر تماماً كما في تصميمك */
+        .top-nav-bar { background: #064e3b; color: white; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; }
+        .top-nav-icons { display: flex; gap: 8px; align-items: center; }
+        .icon-btn { background: #047857; border: none; color: white; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 14px; }
+        .store-badge { background: #047857; padding: 6px 12px; border-radius: 20px; display: flex; align-items: center; gap: 8px; font-size: 14px; }
+        .store-letter { background: #022c22; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+
+        .container { max-width: 480px; margin: 10px auto; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        
+        /* الأقسام والمكونات */
+        .section-box { border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px; margin-bottom: 12px; background: #fff; }
+        .section-title { font-size: 14px; font-weight: bold; color: #1f2937; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+        
+        input { width: 100%; padding: 10px; margin-bottom: 8px; border: 1px solid #d1d5db; border-radius: 6px; box-sizing: border-box; font-size: 13px; }
+        
+        .btn-green { background: #10b981; color: white; border: none; width: 100%; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-bottom: 8px; }
+        .btn-green:hover { background: #059669; }
+        
+        .btn-blue { background: #2563eb; color: white; border: none; width: 100%; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-bottom: 8px; }
+        .btn-purple { background: #7c3aed; color: white; border: none; width: 100%; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-bottom: 8px; }
+        .btn-orange { background: #d97706; color: white; border: none; width: 100%; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-bottom: 8px; }
+
+        .helper-text { font-size: 12px; color: #6b7280; text-align: center; margin-bottom: 8px; }
+
+        /* شريط التنقل السفلي بالعربية تماماً كما طلبت */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-around; padding: 8px 0; box-shadow: 0 -2px 5px rgba(0,0,0,0.05); direction: rtl; }
+        .nav-item { text-align: center; color: #4b5563; text-decoration: none; font-size: 12px; }
         .nav-item.active { color: #064e3b; font-weight: bold; }
-        .card-info { background: #f0fdf4; border: 1px solid #bbf7d0; padding: 10px; border-radius: 6px; font-size: 13px; color: #166534; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="top-header">
-        <div>
-            <span style="font-size: 16px; font-weight: bold;">Zimmah Pro</span>
-            <div style="font-size: 11px; opacity: 0.8;">Nidaamka Maaliyadda & Deymaha</div>
+    <!-- شريط الأدوات العلوي المطابق لصورتك تماماً -->
+    <div class="top-nav-bar">
+        <div class="top-nav-icons">
+            <button class="icon-btn" title="Settings">⚙️</button>
+            <button class="icon-btn" title="Lock">🔒</button>
+            <button class="icon-btn" title="Browser">🌐</button>
+            <button class="icon-btn" title="History">🕒</button>
+            <button class="icon-btn" title="View">👁️</button>
         </div>
-        <div style="background: #047857; padding: 4px 8px; border-radius: 4px; font-size: 11px;">v2.5</div>
+        <div class="store-badge">
+            <div style="text-align: right;">
+                <div style="font-weight: bold; font-size: 13px;">Zimmah</div>
+                <div style="font-size: 10px; opacity: 0.8;">متجر البركة للتجارة</div>
+            </div>
+            <div class="store-letter">ذ</div>
+        </div>
     </div>
 
-    <div class="container" id="main-content">
-        <!-- قسم الإعدادات والأمان الرئيسي (Dejinta) -->
-        <div class="section-title">Dejinta & Ammaanka</div>
+    <!-- محتوى التطبيق الأساسي -->
+    <div class="container">
         
-        <div class="card-info">
-            ⚡ <b>AI-Ready Architecture:</b> الهوية البرمجية والتطوير المستمر - المهندس: محسن / عبد الخبير. قابلية التوسع كلياً للحقن الذكي.
+        <!-- قسم تسجيل ديون الزبائن -->
+        <div class="section-box">
+            <div class="section-title">✏️ Recording customer debts</div>
+            <input type="text" placeholder="Customer name">
+            <input type="number" placeholder="Amount due">
+            <button class="btn-green">Add a new debt to the ledger</button>
+            <div class="helper-text">There are no debts currently recorded in the book.</div>
         </div>
 
-        <label>Lambarka Dukaanadaada (EVC Plus):</label>
-        <input type="text" id="storePhone" placeholder="مثال: 25261xxxxxxx" value="613938202">
+        <!-- قسم الحماية السحابية -->
+        <div class="section-box" style="border-color: #93c5fd;">
+            <div class="section-title">🔒 Protect and store your debts in the cloud</div>
+            <input type="text" placeholder="Associated phone number">
+            <input type="password" placeholder="Secret emergency key">
+            <button class="btn-green">Securely save and link your account</button>
+            <button class="btn-blue">Data recovery for a new device</button>
+        </div>
 
-        <label>Lambarka Xisaabta Bangiga (Ikhtiyaari):</label>
-        <input type="text" id="bankAccount" placeholder="أو رقم الحساب البنكي IBAN">
+        <!-- مؤشر التعاون وثقة المجتمع -->
+        <div class="section-box" style="border-color: #c4b5fd;">
+            <div class="section-title">🤝 Cooperation and the Community Trust Index</div>
+            <input type="text" placeholder="Partner or family name for sharing">
+            <button class="btn-purple">Sharing the journal entry with the partner</button>
+            <div class="helper-text" style="color: #059669; font-weight: bold;">Customer confidence indicator: Active and secure</div>
+        </div>
 
-        <label>Luuqadda:</label>
-        <select id="langSelect">
-            <option value="Soomaali">Soomaali (الصومالية)</option>
-            <option value="Arabic">العربية</option>
-        </select>
+        <!-- ميزات التاجر الماسي -->
+        <div class="section-box" style="border-color: #fde68a;">
+            <div class="section-title">⭐ Features of the paid Diamond Merchant</div>
+            <button class="btn-orange">Upgrade your account to the VIP package</button>
+        </div>
 
-        <button onclick="saveSettings()">Beddel Lambarka Sireed (PIN)</button>
-        <button onclick="clearData()" class="btn-danger">Tirtir Dhammaan Xogta</button>
     </div>
 
-    <!-- شريط التنقل السفلي الأصلي -->
+    <!-- شريط التنقل السفلي (باللغة العربية كما أردت) -->
     <div class="bottom-nav">
-        <a href="#" class="nav-item" onclick="switchTab('hoyga')">
-            <div>🏠</div>
-            <div>Hoyga</div>
-        </a>
-        <a href="#" class="nav-item" onclick="switchTab('macamiisha')">
-            <div>👥</div>
-            <div>Macamiisha</div>
-        </a>
-        <a href="#" class="nav-item" onclick="switchTab('pro')">
-            <div>⭐</div>
-            <div>Pro</div>
-        </a>
-        <a href="#" class="nav-item active" onclick="switchTab('dejinta')">
+        <a href="#" class="nav-item">
             <div>⚙️</div>
-            <div>Dejinta</div>
+            <div>الإعدادات</div>
+        </a>
+        <a href="#" class="nav-item">
+            <div>🚚</div>
+            <div>الموردون</div>
+        </a>
+        <a href="#" class="nav-item">
+            <div>👥</div>
+            <div>الزبائن</div>
+        </a>
+        <a href="#" class="nav-item active">
+            <div>🔲</div>
+            <div>الرئيسية</div>
         </a>
     </div>
 
-    <script>
-        function saveSettings() {
-            let phone = document.getElementById('storePhone').value;
-            localStorage.setItem('zimmah_store_phone', phone);
-            alert('Waa la keydiyay xogta guul! (تم حفظ الإعدادات بنجاح)');
-        }
-
-        function clearData() {
-            if(confirm('Ma hubtaa inaad tirtirto xogta?')) {
-                localStorage.clear();
-                alert('Waa la tirtiray xogta.');
-            }
-        }
-
-        function switchTab(tabName) {
-            let content = document.getElementById('main-content');
-            if(tabName === 'dejinta') {
-                content.innerHTML = `
-                    <div class="section-title">Dejinta & Ammaanka</div>
-                    <label>Lambarka Dukaanadaada (EVC Plus):</label>
-                    <input type="text" id="storePhone" value="${localStorage.getItem('zimmah_store_phone') || '613938202'}">
-                    <button onclick="saveSettings()">Keydi Isbedelka</button>
-                    <button onclick="clearData()" class="btn-danger">Tirtir Dhammaan Xogta</button>
-                `;
-            } else if(tabName === 'hoyga') {
-                content.innerHTML = `<div class="section-title">Hoyga - Dashboard</div><p>Soo dhawoow تطبيق زمة برو الأساسي لإدارة المتاجر.</p>`;
-            } else if(tabName === 'macamiisha') {
-                content.innerHTML = `<div class="section-title">Macamiisha - Dejinta Deymaha</div><p>قائمة الزبائن والديون المسجلة.</p>`;
-            } else if(tabName === 'pro') {
-                content.innerHTML = `<div class="section-title">Zimmah Pro VIP</div><p>ميزات التاجر الماسي والتقارير المتقدمة وتصدير Excel/PDF.</p>`;
-            }
-        }
-    </script>
 </body>
 </html>
