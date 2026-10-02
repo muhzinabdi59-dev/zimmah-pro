@@ -5,91 +5,150 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zimmah Pro - دفتر الديون الذكي v1.1.0</title>
     <style>
-        body { font-family: Tahoma, sans-serif; background: #f4f6f9; margin: 0; padding: 20px; direction: rtl; }
-        .container { max-width: 420px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        body { font-family: Tahoma, sans-serif; background: #f4f6f9; margin: 0; padding: 15px; direction: rtl; }
+        .container { max-width: 420px; margin: auto; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         h2 { text-align: center; color: #333; margin-bottom: 5px; }
-        .badge { text-align: center; font-size: 11px; background: #e2e8f0; color: #475569; padding: 3px 8px; border-radius: 10px; display: inline-block; margin: 0 auto 15px auto; width: fit-content; }
-        .section { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px solid #ddd; }
-        input, button { width: 100%; padding: 10px; margin-top: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 14px; }
+        .badge { text-align: center; font-size: 11px; background: #e2e8f0; color: #475569; padding: 3px 8px; border-radius: 10px; display: block; margin: 0 auto 15px auto; width: fit-content; }
+        .section { background: #f8f9fa; padding: 12px; border-radius: 8px; margin-top: 12px; border: 1px solid #ddd; }
+        input, button { width: 100%; padding: 10px; margin-top: 6px; margin-bottom: 8px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 14px; }
         button { background: #28a745; color: white; border: none; font-weight: bold; cursor: pointer; }
         button:hover { background: #218838; }
         .btn-secondary { background: #0284c7; }
-        .btn-secondary:hover { background: #0369a1; }
         .btn-vip { background: #d97706; }
-        .btn-vip:hover { background: #b45309; }
-        p { font-size: 13px; color: #666; margin: 0 0 10px 0; }
+        .btn-social { background: #4f46e5; }
+        .customer-item { background: #fff; padding: 10px; margin-top: 6px; border-radius: 6px; border: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        p { font-size: 13px; color: #666; margin: 0 0 8px 0; }
     </style>
 </head>
 <body>
 
-<div class="container" style="text-align: center;">
+<div class="container">
     <h2>Zimmah Pro 💼</h2>
-    <div class="badge">الإصدار الخارق v1.1.0 - برو والميزات المدفوعة</div>
-    <p>الأمان المزدوج والخدمات التجارية المتقدمة</p>
+    <span class="badge">الإصدار الشامل v1.1.0 - الأمان، الدفتر والـ VIP</span>
 
-    <!-- قسم الأمان والنسخ الاحتياطي الذكي -->
-    <div class="section" style="text-align: right;">
-        <h3 style="font-size: 15px; color: #333; margin-bottom: 5px;">حماية وحفظ الديون سحابياً 🔒</h3>
-        <p>اربط رقم هاتفك ومفتاح الاستعادة لضمان عدم ضياع الديون.</p>
-        <input type="tel" id="backupPhone" placeholder="رقم الهاتف (مثال: 61xxxxxxx)">
+    <!-- 1. قسم دفتر الديون الأساسي (لكل مستخدم جديد) -->
+    <div class="section">
+        <h3 style="font-size: 14px; color: #333; margin-top: 0;">تسجيل ديون العملاء 📝</h3>
+        <input type="text" id="custName" placeholder="اسم العميل">
+        <input type="number" id="custDebt" placeholder="المبلغ المستحق">
+        <button onclick="addCustomer()">إضافة دين جديد للدفتر</button>
+        <div id="customerList" style="margin-top: 10px;"></div>
+    </div>
+
+    <!-- 2. قسم الحماية المزدوجة (رقم الهاتف + مفتاح الطوارئ) -->
+    <div class="section">
+        <h3 style="font-size: 14px; color: #333; margin-top: 0;">حماية وحفظ الديون سحابياً 🔒</h3>
+        <input type="tel" id="backupPhone" placeholder="رقم الهاتف المرتبط">
         <input type="text" id="recoveryKey" placeholder="مفتاح الطوارئ السري">
         <button onclick="saveAdvancedBackup()">حفظ وربط الحساب بأمان</button>
         <button onclick="restoreAccount()" class="btn-secondary">استعادة البيانات لجهاز جديد</button>
     </div>
 
-    <!-- قسم الميزات المدفوعة والترقية الماسية (VIP) -->
-    <div class="section" style="text-align: right; border: 1.5px solid #f59e0b;">
-        <h3 style="font-size: 15px; color: #d97706; margin-bottom: 5px;">ميزات التاجر الماسي المدفوعة ⭐</h3>
-        <p>احصل على تقارير محاسبية شاملة ومزامنة تلقائية سحابية متقدمة.</p>
-        
-        <button onclick="upgradeToVip()" class="btn-vip">ترقية الحساب إلى باقة VIP (مدفوع)</button>
-        <button onclick="exportAccountingReport()" class="btn-vip" style="background: #b45309;">تصدير تقرير المحاسبة (PDF / Excel)</button>
+    <!-- 3. قسم المشاركة والتعاون الاجتماعي (دفتر العائلة/الشركاء ومؤشر الثقة) -->
+    <div class="section" style="border: 1.5px solid #4f46e5;">
+        <h3 style="font-size: 14px; color: #4f46e5; margin-top: 0;">التعاون ومؤشر الثقة المجتمعي 🤝</h3>
+        <input type="text" id="partnerName" placeholder="اسم الشريك أو العائلة للمشاركة">
+        <button onclick="shareLedger()" class="btn-social">مشاركة سجل الدفتر مع الشريك</button>
+        <p id="trustIndex" style="margin-top: 6px; font-weight: bold; color: #333;">مؤشر الثقة للعملاء: نشط وآمن</p>
+    </div>
+
+    <!-- 4. قسم ميزات التاجر الماسي (VIP المدفوعة) -->
+    <div class="section" style="border: 1.5px solid #f59e0b;">
+        <h3 style="font-size: 14px; color: #d97706; margin-top: 0;">ميزات التاجر الماسي المدفوعة ⭐</h3>
+        <button onclick="upgradeToVip()" class="btn-vip">ترقية الحساب إلى باقة VIP</button>
+        <button onclick="exportAccountingReport()" class="btn-vip" style="background: #b45309;">تصدير تقرير المحاسبة الاحترافي (PDF / Excel)</button>
     </div>
 </div>
 
 <script>
+let db = JSON.parse(localStorage.getItem('zimmah_ledger_data')) || { customers: [] };
+
+function render() {
+    let listEl = document.getElementById('customerList');
+    listEl.innerHTML = '';
+    if (db.customers.length === 0) {
+        listEl.innerHTML = '<p style="text-align:center; color:#999;">لا توجد ديون مسجلة حالياً في الدفتر.</p>';
+        return;
+    }
+    db.customers.forEach((c, index) => {
+        listEl.innerHTML += `<div class="customer-item">
+            <span><strong>${c.name}</strong>: ${c.debt}</span>
+            <button style="width:auto; padding:5px 10px; background:#dc3545; margin:0;" onclick="deleteCustomer(${index})">حذف</button>
+        </div>`;
+    });
+}
+
+function addCustomer() {
+    let name = document.getElementById('custName').value.trim();
+    let debt = document.getElementById('custDebt').value.trim();
+    if (!name || !debt) {
+        alert('الرجاء إدخال اسم العميل والمبلغ بشكل صحيح.');
+        return;
+    }
+    db.customers.push({ name: name, debt: debt });
+    localStorage.setItem('zimmah_ledger_data', JSON.stringify(db));
+    document.getElementById('custName').value = '';
+    document.getElementById('custDebt').value = '';
+    render();
+}
+
+function deleteCustomer(index) {
+    db.customers.splice(index, 1);
+    localStorage.setItem('zimmah_ledger_data', JSON.stringify(db));
+    render();
+}
+
 function saveAdvancedBackup() {
     var phone = document.getElementById('backupPhone').value.trim();
     var key = document.getElementById('recoveryKey').value.trim();
     if(phone.length < 7 || key.length < 4) {
-        alert('الرجاء إدخال رقم هاتف صحيح ومفتاح سري آمن لا يقل عن 4 خانات.');
+        alert('الرجاء إدخال رقم هاتف صحيح ومفتاح سري آمن للحماية.');
         return;
     }
-    var currentLedgerData = localStorage.getItem('zimmah_ledger_data') || '{"debts": []}';
-    var securePackage = { phone: phone, recoveryKey: key, timestamp: new Date().toISOString(), data: currentLedgerData };
+    var securePackage = { phone: phone, recoveryKey: key, data: JSON.stringify(db) };
     localStorage.setItem('zimmah_secure_vault', JSON.stringify(securePackage));
-    localStorage.setItem('zimmah_user_phone', phone);
-    alert('تم تأمين وحفظ دفتر الديون بنجاح!\nرقم الهاتف المرتبط: ' + phone);
+    alert('تم تأمين وحفظ دفتر الديون بنجاح!');
 }
 
 function restoreAccount() {
-    var phone = prompt('أدخل رقم الهاتف المرتبط بالحساب لاستعادة البيانات:');
-    var key = prompt('أدخل مفتاح الطوارئ السري الخاص بك:');
+    var phone = prompt('أدخل رقم الهاتف المرتبط:');
+    var key = prompt('أدخل مفتاح الطوارئ السري:');
     var savedVault = localStorage.getItem('zimmah_secure_vault');
-    if(!savedVault) { alert('لا توجد بيانات محفوظة محلياً.'); return; }
+    if(!savedVault) { alert('لا توجد بيانات محفوظة مسبقاً.'); return; }
     var vaultData = JSON.parse(savedVault);
     if(vaultData.phone === phone && vaultData.recoveryKey === key) {
-        localStorage.setItem('zimmah_ledger_data', vaultData.data);
-        alert('تمت استعادة دفتر الديون بنجاح تام!');
+        db = JSON.parse(vaultData.data);
+        localStorage.setItem('zimmah_ledger_data', JSON.stringify(db));
+        render();
+        alert('تمت استعادة دفتر الديون والبيانات بنجاح تام!');
     } else {
-        alert('خطأ في بيانات المطابقة (رقم الهاتف أو المفتاح السري غير صحيح).');
+        alert('خطأ في بيانات المطابقة أو المفتاح السري.');
     }
 }
 
-// الدوال الخاصة بالميزات المدفوعة
+function shareLedger() {
+    let partner = document.getElementById('partnerName').value.trim();
+    if(!partner) {
+        alert('الرجاء إدخال اسم الشريك أو أفراد العائلة.');
+        return;
+    }
+    alert('تم ربط ومشاركة سجل الدفتر بنجاح مع الشريك: ' + partner);
+}
+
 function upgradeToVip() {
-    alert('مرحباً بك في نظام الترقية المدفوعة لـ Zimmah Pro!\nسيتم توجيه التاجر لإتمام الاشتراك الرمزي وتفعيل الصلاحيات الماسية الكاملة.');
+    alert('تم تفعيل الصلاحيات الماسية (VIP) بنجاح!');
     localStorage.setItem('zimmah_vip_status', 'active');
 }
 
 function exportAccountingReport() {
-    var isVip = localStorage.getItem('zimmah_vip_status');
-    if(!isVip) {
-        alert('هذه الميزة مخصصة لمشتركي باقة VIP. يرجى ترقية الحساب أولاً للاستفادة من التصدير الاحترافي.');
+    if(!localStorage.getItem('zimmah_vip_status')) {
+        alert('هذه الميزة مخصصة لمشتركي باقة VIP.');
         return;
     }
-    alert('جاري إعداد وتصدير التقارير المحاسبية الرسمية للدفتر بنجاح...');
+    alert('جاري تجهيز وتصدير تقارير المحاسبة الرسمية بصيغة Excel / PDF...');
 }
+
+render();
 </script>
 
 </body>
